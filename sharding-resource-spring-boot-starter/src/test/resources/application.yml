@@ -1,0 +1,27 @@
+spring:
+  sharding:
+    resource:
+      # 数据库配置
+      databases:
+        - instanceName: 192.168.1.100:3306
+          resourceName: user-service
+          resourceType: MASTER
+          driverType: DRUID
+          driver: jdbc
+          url: test
+          username: admin
+          password: 123456
+          properties:
+            hello: world
+            test: test2
+        - instanceName: 192.168.1.100:3306
+          resourceName: user-service
+          resourceType: MASTER
+          driverType: DRUID
+          driver: jdbc
+          url: test
+          username: admin
+          password: 123456
+          properties:
+            hello: world
+            test: test2
