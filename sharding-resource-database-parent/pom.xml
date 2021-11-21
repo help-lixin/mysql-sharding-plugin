@@ -16,6 +16,7 @@
         <module>sharding-resource-database-context</module>
         <module>sharding-resource-database-meta</module>
         <module>sharding-resource-database-core</module>
+        <module>sharding-resource-database-mybatis</module>
     </modules>
 
     <properties>
