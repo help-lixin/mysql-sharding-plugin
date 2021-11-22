@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="help.lixin.sharding.resource.mapper.UserMapper">
+
+    <select id="selectUserbyIds" resultType="map">
+        SELECT *
+        FROM ${database}.${tablePrefix}user t
+        WHERE t.user_id IN
+        <foreach collection="userIds" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>

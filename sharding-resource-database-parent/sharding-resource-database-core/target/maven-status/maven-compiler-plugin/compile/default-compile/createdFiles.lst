@@ -1,0 +1,10 @@
+help/lixin/datasource/core/VirtualDataSource.class
+help/lixin/datasource/util/DataSourceUtil.class
+help/lixin/datasource/customizer/impl/HikariCPDataSourceCustomizer.class
+help/lixin/datasource/core/impl/VirtuaDataSourceDelegator.class
+help/lixin/datasource/core/IVirtuaDataSourceDelegator.class
+help/lixin/datasource/manager/impl/DefaultDataSourceManager$1.class
+help/lixin/datasource/manager/IDataSourceManager.class
+help/lixin/datasource/manager/impl/DefaultDataSourceManager.class
+help/lixin/datasource/customizer/IDataSourceCustomizer.class
+help/lixin/datasource/customizer/impl/DruidDataSourceCustomizer.class

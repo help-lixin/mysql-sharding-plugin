@@ -1,0 +1,6 @@
+help/lixin/datasource/mybatis/config/MyBatisExtConfiguration.class
+help/lixin/datasource/mybatis/scripting/xmltags/TextSqlNode$DynamicCheckerTokenParser.class
+help/lixin/datasource/mybatis/LanguageDriverCustomizer.class
+help/lixin/datasource/mybatis/scripting/xmltags/TextSqlNode.class
+help/lixin/datasource/mybatis/scripting/xmltags/TextSqlNode$BindingTokenParser.class
+help/lixin/datasource/mybatis/scripting/xmltags/XMLLanguageDriver.class
