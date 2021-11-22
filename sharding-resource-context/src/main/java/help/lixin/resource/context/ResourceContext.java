@@ -14,7 +14,7 @@ public abstract class ResourceContext {
         return CTX.get();
     }
 
-    public static void unBind(ResourceContextInfo context) {
+    public static void unBind() {
         CTX.remove();
     }
 }

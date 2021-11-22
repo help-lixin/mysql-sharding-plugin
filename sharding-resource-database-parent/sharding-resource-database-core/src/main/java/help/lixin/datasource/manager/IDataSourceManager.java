@@ -1,4 +1,4 @@
-package help.lixin.datasource.core;
+package help.lixin.datasource.manager;
 
 import help.lixin.datasource.context.DBResourceContextInfo;
 

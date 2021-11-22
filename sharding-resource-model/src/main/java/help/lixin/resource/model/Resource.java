@@ -23,12 +23,13 @@ public interface Resource {
      *
      * @return
      */
-    public Map<String, String> getProperties();
+    public Map<String, Object> getProperties();
 
     /**
      * 获取其它变量信息
      *
      * @param vars
      */
-    public void setProperties(Map<String, String> vars);
+    public void setProperties(Map<String, Object> properties);
+
 }

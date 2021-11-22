@@ -11,7 +11,6 @@ import org.apache.ibatis.scripting.xmltags.OgnlCache;
 import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.type.SimpleTypeRegistry;
 
-import java.lang.ref.PhantomReference;
 import java.util.Map;
 import java.util.regex.Pattern;
 

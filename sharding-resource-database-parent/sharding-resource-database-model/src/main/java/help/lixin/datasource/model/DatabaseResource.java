@@ -1,12 +1,10 @@
 package help.lixin.datasource.model;
 
-import help.lixin.datasource.DriverType;
 import help.lixin.resource.ResourceType;
 import help.lixin.resource.model.Resource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 数据库资源(唯的标识为: resourceName )
@@ -14,18 +12,18 @@ import java.util.Objects;
 public class DatabaseResource implements Resource {
     // 实例名称(比如:192.168.1.100:3306),仅用于标记
     private String instanceName;
-    // 资源名称(user-service)
+    // 数据源名称(user-service)
     private String resourceName;
     // 资源属于master还是slave
     private ResourceType resourceType = ResourceType.MASTER;
-    // 驱动程序工厂
-    private DriverType driverType = DriverType.DRUID;
+    // 驱动类型
+    private String type;
     // 驱动程序信息
     private String driver;
     private String url;
     private String username;
     private String password;
-    private Map<String, String> properties = new HashMap<>();
+    private Map<String, Object> properties = new HashMap<>();
 
     @Override
     public void setResourceName(String resourceName) {
@@ -53,12 +51,12 @@ public class DatabaseResource implements Resource {
         this.resourceType = resourceType;
     }
 
-    public DriverType getDriverType() {
-        return driverType;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void setDriverType(DriverType driverType) {
-        this.driverType = driverType;
+    public String getType() {
+        return type;
     }
 
     public String getDriver() {
@@ -93,13 +91,14 @@ public class DatabaseResource implements Resource {
         this.password = password;
     }
 
-    public void setProperties(Map<String, String> properties) {
+    public void setProperties(Map<String, Object> properties) {
         this.properties = properties;
     }
 
-    public Map<String, String> getProperties() {
+    public Map<String, Object> getProperties() {
         return properties;
     }
+
 
     @Override
     public String toString() {
@@ -107,7 +106,7 @@ public class DatabaseResource implements Resource {
                 "instanceName='" + instanceName + '\'' +
                 ", resourceName='" + resourceName + '\'' +
                 ", resourceType=" + resourceType +
-                ", driverType=" + driverType +
+                ", type='" + type + '\'' +
                 ", driver='" + driver + '\'' +
                 ", url='" + url + '\'' +
                 ", username='" + username + '\'' +

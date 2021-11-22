@@ -13,7 +13,6 @@ public class VirtuaDataSourceDelegator implements IVirtuaDataSourceDelegator {
 
     private Logger logger = LoggerFactory.getLogger(VirtuaDataSourceDelegator.class);
 
-
     @Override
     public Connection getConnection(DBResourceContextInfo ctx) throws SQLException {
 

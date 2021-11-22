@@ -12,7 +12,6 @@ import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.DynamicSqlSource;
-import org.apache.ibatis.scripting.xmltags.XMLScriptBuilder;
 import org.apache.ibatis.session.Configuration;
 
 /**
@@ -26,6 +25,7 @@ public class XMLLanguageDriver implements LanguageDriver {
 
     @Override
     public SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType) {
+        // 自定义:XMLScriptBuilder
         XMLScriptBuilder builder = new XMLScriptBuilder(configuration, script, parameterType);
         return builder.parseScriptNode();
     }
