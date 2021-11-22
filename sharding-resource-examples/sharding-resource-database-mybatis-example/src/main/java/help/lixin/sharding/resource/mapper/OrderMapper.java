@@ -22,14 +22,14 @@ public interface OrderMapper {
     int insertOrder(@Param("userId") Long userId, @Param("price") BigDecimal price, @Param("status") String status);
 
     /**
-     * 根据id列表查询订单
+     * 根据id列表查询订单,测试,也支持库和表前缀
      * @param orderIds
      * @return
      */
 //    @Select("<script>" +
 //            "select" +
 //            " * " +
-//            " from t_order t " +
+//            " from ${database}.${tablePrefix}order t " +
 //            " where t.order_id in " +
 //            " <foreach collection='orderIds' open='(' separator=',' close=')' item='id'>" +
 //            " #{id} " +

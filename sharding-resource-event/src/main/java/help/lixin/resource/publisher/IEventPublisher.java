@@ -20,7 +20,7 @@ public interface IEventPublisher {
      *
      * @param eventListener
      */
-    boolean unsubscribe(IEventListener eventListener);
+    boolean unSubscribe(IEventListener eventListener);
 
     /**
      * 发布事件

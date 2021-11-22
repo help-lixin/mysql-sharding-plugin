@@ -1,6 +1,7 @@
 package help.lixin.datasource.mybatis.scripting.xmltags;
 
 import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.resource.bindings.IBindingsVariable;
 import help.lixin.resource.context.ResourceContext;
 import help.lixin.resource.context.ResourceContextInfo;
 import org.apache.ibatis.parsing.GenericTokenParser;
@@ -12,6 +13,7 @@ import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.type.SimpleTypeRegistry;
 
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.regex.Pattern;
 
 public class TextSqlNode implements SqlNode {
@@ -77,29 +79,12 @@ public class TextSqlNode implements SqlNode {
                 this.context.getBindings().put("value", parameter);
             }
 
-            // 增加从线程上下文获得变量信息
-            // lixin 2021/11/21
-            ResourceContextInfo tmp = ResourceContext.get();
-            if (null != tmp && tmp instanceof DBResourceContextInfo
-                    && !context.getBindings().containsKey("database")
-                    && !context.getBindings().containsKey("tablePrefix")
-            ) {
-                DBResourceContextInfo ctx = (DBResourceContextInfo) tmp;
-                String tenantId = ctx.getTenantId();
-                String database = ctx.getDatabase();
-                String tablePrefix = ctx.getTablePrefix();
-                String microServiceName = ctx.getMicroServiceName();
-                Map<String, String> properties = ctx.getProperties();
+            // 通过SPI进行处理.
+            ServiceLoader<IBindingsVariable> bindingsVariables = ServiceLoader.load(IBindingsVariable.class);
+            bindingsVariables.forEach(bindingsVariable -> {
+                bindingsVariable.bindings(context.getBindings());
+            });
 
-                context.getBindings().put("tenantId", tenantId);
-                context.getBindings().put("database", database);
-                context.getBindings().put("tablePrefix", tablePrefix);
-                context.getBindings().put("microServiceName", microServiceName);
-
-                properties.forEach((key, value) -> {
-                    context.getBindings().put(key, value);
-                });
-            }
 
             Object value = OgnlCache.getValue(content, this.context.getBindings());
             String srtValue = value == null ? "" : String.valueOf(value);

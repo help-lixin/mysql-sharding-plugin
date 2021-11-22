@@ -38,7 +38,11 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1.1-jre</version>
+        </dependency>
         <dependency>
             <artifactId>sharding-resource-spring-boot-starter</artifactId>
             <groupId>help.lixin.sharding.resource</groupId>

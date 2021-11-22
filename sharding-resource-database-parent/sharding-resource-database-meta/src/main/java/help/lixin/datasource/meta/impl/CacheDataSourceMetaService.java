@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 通过组合模式,进行缓存
  */
-public class CacheDataSourceMetaService implements IDataSourceMetaService, IEventListener {
+public class CacheDataSourceMetaService extends AbstractDataSourceMetaService implements IDataSourceMetaService, IEventListener {
 
     private IDataSourceMetaService dataSourceMetaService;
 
@@ -39,6 +39,7 @@ public class CacheDataSourceMetaService implements IDataSourceMetaService, IEven
      */
     @Override
     public void onEvent(Event event) {
+        // TODO lixin 判断事件再进行刷新
         metas.clear();
         // 清空后,手动进行加载一次元数据.
         getMeta();

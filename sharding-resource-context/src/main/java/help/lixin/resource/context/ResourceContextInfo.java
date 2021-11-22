@@ -4,6 +4,25 @@ import java.util.List;
 import java.util.Map;
 
 public interface ResourceContextInfo {
+
+    /**
+     * 区域(比如:北京)
+     *
+     * @param region
+     */
+    public void setRegion(String region);
+
+    public String getRegion();
+
+    /**
+     * 机房(比如:机房1)
+     *
+     * @param zone
+     */
+    public void setZone(String zone);
+
+    public String getZone();
+
     public void setTenantId(String tenantId);
 
     public String getTenantId();

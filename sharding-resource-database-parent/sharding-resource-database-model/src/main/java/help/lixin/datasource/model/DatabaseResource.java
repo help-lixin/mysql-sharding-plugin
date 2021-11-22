@@ -16,8 +16,6 @@ public class DatabaseResource implements Resource {
     private String resourceName;
     // 资源属于master还是slave
     private ResourceType resourceType = ResourceType.MASTER;
-    // 驱动类型
-    private String type;
     // 驱动程序信息
     private String driver;
     private String url;
@@ -49,14 +47,6 @@ public class DatabaseResource implements Resource {
 
     public void setResourceType(ResourceType resourceType) {
         this.resourceType = resourceType;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public String getDriver() {
@@ -106,7 +96,6 @@ public class DatabaseResource implements Resource {
                 "instanceName='" + instanceName + '\'' +
                 ", resourceName='" + resourceName + '\'' +
                 ", resourceType=" + resourceType +
-                ", type='" + type + '\'' +
                 ", driver='" + driver + '\'' +
                 ", url='" + url + '\'' +
                 ", username='" + username + '\'' +

@@ -1,8 +1,9 @@
 package help.lixin.resource;
 
+import help.lixin.datasource.config.ShardingResourceConfig;
 import help.lixin.datasource.mybatis.config.MyBatisExtConfiguration;
 import help.lixin.resource.constants.Constants;
-import help.lixin.resource.properties.ShardingResourceProperties;
+import help.lixin.datasource.properties.ShardingResourceProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(ShardingResourceProperties.class)
-@ImportAutoConfiguration({MyBatisExtConfiguration.class})
+@ImportAutoConfiguration({MyBatisExtConfiguration.class, ShardingResourceConfig.class})
 @ConditionalOnProperty(prefix = Constants.SHARDING_RESOURCE_KEY, name = Constants.ENABLED, havingValue = "true", matchIfMissing = false)
 public class ShardingResourceAutoConfiguration {
 

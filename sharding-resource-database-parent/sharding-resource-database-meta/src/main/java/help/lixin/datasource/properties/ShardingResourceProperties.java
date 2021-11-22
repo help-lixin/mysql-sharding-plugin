@@ -1,4 +1,4 @@
-package help.lixin.resource.properties;
+package help.lixin.datasource.properties;
 
 import help.lixin.datasource.model.DatabaseResource;
 import help.lixin.resource.constants.Constants;
@@ -20,7 +20,7 @@ public class ShardingResourceProperties {
     private String microServiceName;
 
     // db资源
-    private Set<DatabaseResource> databases = new LinkedHashSet<>(0);
+    private List<DatabaseResource> databases = new ArrayList<>(0);
 
     public void setEnvs(List<String> envs) {
         this.envs = envs;
@@ -63,11 +63,11 @@ public class ShardingResourceProperties {
         this.microServiceName = microServiceName;
     }
 
-    public Set<DatabaseResource> getDatabases() {
+    public List<DatabaseResource> getDatabases() {
         return databases;
     }
 
-    public void setDatabases(Set<DatabaseResource> databases) {
+    public void setDatabases(List<DatabaseResource> databases) {
         this.databases = databases;
     }
 }

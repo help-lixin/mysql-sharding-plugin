@@ -22,6 +22,12 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>help.lixin.sharding.resource</groupId>
+            <artifactId>sharding-resource-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>${mybatis.version}</version>

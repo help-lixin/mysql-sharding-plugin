@@ -19,7 +19,7 @@ public class DefaultEventPublisher implements IEventPublisher {
     }
 
     @Override
-    public boolean unsubscribe(IEventListener eventListener) {
+    public boolean unSubscribe(IEventListener eventListener) {
         return eventListeners.remove(eventListener);
     }
 

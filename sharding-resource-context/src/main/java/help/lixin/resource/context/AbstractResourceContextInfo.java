@@ -8,12 +8,26 @@ public abstract class AbstractResourceContextInfo implements ResourceContextInfo
     protected String env;
     protected List<String> envs = new ArrayList<>(0);
     protected Map<String, String> properties = new HashMap<>();
+    private String region;
+    private String zone;
 
     public abstract static class Build {
         protected String tenantId;
         protected String microServiceName;
         protected String env;
+        private String region;
+        private String zone;
         protected Map<String, String> properties = new HashMap<>();
+
+        public Build region(String region) {
+            this.region = region;
+            return this;
+        }
+
+        public Build zone(String zone) {
+            this.zone = zone;
+            return this;
+        }
 
         public Build tenantId(String tenantId) {
             this.tenantId = tenantId;
@@ -81,5 +95,25 @@ public abstract class AbstractResourceContextInfo implements ResourceContextInfo
     @Override
     public Map<String, String> getProperties() {
         return properties;
+    }
+
+    @Override
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    @Override
+    public String getRegion() {
+        return region;
+    }
+
+    @Override
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+
+    @Override
+    public String getZone() {
+        return zone;
     }
 }
