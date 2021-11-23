@@ -12,7 +12,7 @@ public class HikariCPDataSourceCustomizer implements IDataSourceCustomizer {
     @Override
     public boolean support(DataSource dataSource) {
         if (null != dataSource) {
-            return dataSource.getClass().equals(HIKARI_CP_DATASOURCE);
+            return dataSource.getClass().getName().equals(HIKARI_CP_DATASOURCE);
         }
         return false;
     }

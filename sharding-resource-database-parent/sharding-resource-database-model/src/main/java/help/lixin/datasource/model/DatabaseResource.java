@@ -16,7 +16,9 @@ public class DatabaseResource implements Resource {
     private String resourceName;
     // 资源属于master还是slave
     private ResourceType resourceType = ResourceType.MASTER;
-    // 驱动程序信息
+    // 连接池类型(比如:com.alibaba.druid.pool.DruidDataSource)
+    private String type;
+    // 驱动程序信息(比如:com.mysql.jdbc.Driver)
     private String driver;
     private String url;
     private String username;
@@ -89,6 +91,13 @@ public class DatabaseResource implements Resource {
         return properties;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 
     @Override
     public String toString() {
@@ -96,6 +105,7 @@ public class DatabaseResource implements Resource {
                 "instanceName='" + instanceName + '\'' +
                 ", resourceName='" + resourceName + '\'' +
                 ", resourceType=" + resourceType +
+                ", type='" + type + '\'' +
                 ", driver='" + driver + '\'' +
                 ", url='" + url + '\'' +
                 ", username='" + username + '\'' +

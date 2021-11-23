@@ -15,6 +15,16 @@ public class DBResourceContextInfo extends AbstractResourceContextInfo implement
     private String tablePrefix;
     // user-service-datasource
     private String dataSourceName;
+    // 是否只读
+    private boolean readOnly;
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
     public String getInstanceName() {
         return instanceName;
@@ -61,6 +71,13 @@ public class DBResourceContextInfo extends AbstractResourceContextInfo implement
         private String tablePrefix;
         // user-service-datasource
         private String dataSourceName;
+        // 是否只读
+        private boolean readOnly;
+
+        public Build readOnly(boolean readOnly) {
+            this.readOnly = readOnly;
+            return this;
+        }
 
         public Build instanceName(String instanceName) {
             this.instanceName = instanceName;
@@ -89,11 +106,14 @@ public class DBResourceContextInfo extends AbstractResourceContextInfo implement
             ctx.setMicroServiceName(this.microServiceName);
             ctx.setEnv(this.env);
             ctx.setProperties(this.properties);
+            ctx.setRegion(this.region);
+            ctx.setZone(this.zone);
 
             ctx.setInstanceName(this.instanceName);
             ctx.setDatabase(this.database);
             ctx.setTablePrefix(this.tablePrefix);
             ctx.setDataSourceName(this.dataSourceName);
+            ctx.setReadOnly(this.readOnly);
             return ctx;
         }
     }

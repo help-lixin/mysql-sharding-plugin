@@ -8,15 +8,15 @@ public abstract class AbstractResourceContextInfo implements ResourceContextInfo
     protected String env;
     protected List<String> envs = new ArrayList<>(0);
     protected Map<String, String> properties = new HashMap<>();
-    private String region;
-    private String zone;
+    protected String region;
+    protected String zone;
 
     public abstract static class Build {
         protected String tenantId;
         protected String microServiceName;
         protected String env;
-        private String region;
-        private String zone;
+        protected String region;
+        protected String zone;
         protected Map<String, String> properties = new HashMap<>();
 
         public Build region(String region) {

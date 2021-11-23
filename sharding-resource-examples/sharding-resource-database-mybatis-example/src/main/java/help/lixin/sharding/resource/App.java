@@ -17,9 +17,12 @@ import java.util.Map;
 public class App {
     public static void main(String[] args) {
         ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
+//        System.out.println();
         OrderMapper orderMapper = ctx.getBean(OrderMapper.class);
         try {
             ResourceContextInfo info = DBResourceContextInfo.newBuild()
+                    .instanceName("127.0.0.1:3306")
+                    .dataSourceName("user-service")
                     .database("order_db_1")
                     .tablePrefix("tb1_")
                     .build();
@@ -38,7 +41,10 @@ public class App {
         System.out.println("=======================================================================================");
         try {
             ResourceContextInfo info = DBResourceContextInfo.newBuild()
+                    .instanceName("127.0.0.1:3306")
+                    .dataSourceName("user-service")
                     .database("order_db_1")
+                    .readOnly(true)
                     .tablePrefix("tb2_")
                     .build();
             // 绑定上下文
@@ -53,6 +59,5 @@ public class App {
             // 清空上下文
             ResourceContext.unBind();
         }
-
     }
 }
