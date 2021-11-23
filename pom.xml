@@ -16,6 +16,7 @@
         <module>sharding-resource-spring-boot-starter</module>
         <module>sharding-resource-examples</module>
         <module>sharding-resource-api</module>
+        <module>sharding-resource-route</module>
     </modules>
     <name>sharding-resource-parent ${project.version}</name>
 
