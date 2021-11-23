@@ -1,3 +1,5 @@
 help/lixin/datasource/meta/impl/CacheDataSourceMetaService.class
 help/lixin/datasource/meta/impl/EnvironmentDataSourceMetaService.class
+help/lixin/datasource/properties/ShardingResourceProperties.class
 help/lixin/datasource/meta/IDataSourceMetaService.class
+help/lixin/datasource/meta/impl/AbstractDataSourceMetaService.class

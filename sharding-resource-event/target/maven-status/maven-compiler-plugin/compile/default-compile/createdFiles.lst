@@ -1,5 +1,0 @@
-help/lixin/resource/publisher/IEventPublisher.class
-help/lixin/resource/listener/IEventListener.class
-help/lixin/resource/event/ResourceRefreshEvent.class
-help/lixin/resource/event/Event.class
-help/lixin/resource/publisher/DefaultEventPublisher.class

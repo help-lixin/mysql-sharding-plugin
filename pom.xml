@@ -9,14 +9,10 @@
     <version>1.0.0</version>
 
     <modules>
-        <module>sharding-resource-event</module>
-        <module>sharding-resource-model</module>
+        <module>sharding-resource-define-parent</module>
         <module>sharding-resource-database-parent</module>
-        <module>sharding-resource-context</module>
         <module>sharding-resource-spring-boot-starter</module>
         <module>sharding-resource-examples</module>
-        <module>sharding-resource-api</module>
-        <module>sharding-resource-route</module>
     </modules>
     <name>sharding-resource-parent ${project.version}</name>
 

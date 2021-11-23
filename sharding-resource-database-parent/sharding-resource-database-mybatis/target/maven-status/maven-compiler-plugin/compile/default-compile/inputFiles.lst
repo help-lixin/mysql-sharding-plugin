@@ -1,4 +1,6 @@
+/Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-mybatis/src/main/java/help/lixin/resource/bindings/MyBatisBindingsVariable.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-mybatis/src/main/java/help/lixin/datasource/mybatis/config/MyBatisExtConfiguration.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-mybatis/src/main/java/help/lixin/datasource/mybatis/scripting/xmltags/XMLLanguageDriver.java
+/Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-mybatis/src/main/java/help/lixin/datasource/mybatis/scripting/xmltags/XMLScriptBuilder.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-mybatis/src/main/java/help/lixin/datasource/mybatis/LanguageDriverCustomizer.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-mybatis/src/main/java/help/lixin/datasource/mybatis/scripting/xmltags/TextSqlNode.java
