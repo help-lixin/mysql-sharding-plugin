@@ -1,9 +1,11 @@
 package help.lixin.datasource.customizer.impl;
 
+import com.zaxxer.hikari.HikariDataSource;
 import help.lixin.datasource.customizer.IDataSourceCustomizer;
 import help.lixin.datasource.model.DatabaseResource;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 public class HikariCPDataSourceCustomizer implements IDataSourceCustomizer {
 
@@ -19,6 +21,14 @@ public class HikariCPDataSourceCustomizer implements IDataSourceCustomizer {
 
     @Override
     public void customize(DatabaseResource databaseResource, DataSource dataSource) {
-        // TODO lixin
+        HikariDataSource hikariDataSource = (HikariDataSource) dataSource;
+        hikariDataSource.setJdbcUrl(databaseResource.getUrl());
+        hikariDataSource.setDriverClassName(databaseResource.getDriver());
+        hikariDataSource.setUsername(databaseResource.getUsername());
+        hikariDataSource.setPassword(databaseResource.getPassword());
+
+        Properties properties = new Properties();
+        properties.putAll(databaseResource.getProperties());
+        hikariDataSource.setDataSourceProperties(properties);
     }
 }
