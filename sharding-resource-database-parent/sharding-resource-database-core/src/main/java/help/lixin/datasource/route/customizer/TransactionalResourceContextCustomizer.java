@@ -26,8 +26,14 @@ public class TransactionalResourceContextCustomizer implements IResourceContextC
             // 获得被AOP之后的真实对象
             targetClass = AopUtils.getTargetClass(ctx.getInstance());
         }
-        
+
+        // 1. 先查询方法是否有注解(@Transactional)
         Transactional annotation = AnnotationUtils.findAnnotation(ctx.getMethod(), Transactional.class);
+        if (null == annotation) {
+            // 2.方法上没有注解,可能类上有注解@Transactional
+            annotation = AnnotationUtils.findAnnotation(targetClass, Transactional.class);
+        }
+        
         if (null != annotation) {
             // 设置为只读模式
             build.readOnly(annotation.readOnly());

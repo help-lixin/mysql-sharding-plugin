@@ -1,5 +1,6 @@
 package help.lixin.datasource.config;
 
+import help.lixin.datasource.aop.BindResourceContextAspect;
 import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
 import help.lixin.datasource.core.VirtualDataSource;
 import help.lixin.datasource.core.impl.VirtuaDataSourceDelegator;
@@ -206,6 +207,16 @@ public class ShardingResourceConfig {
     @ConditionalOnMissingBean(name = "transactionalResourceContextCustomizer")
     public IResourceContextCustomizer transactionalResourceContextCustomizer() {
         return new TransactionalResourceContextCustomizer();
+    }
+
+    /**
+     * 绑定上下文切面
+     *
+     * @return
+     */
+    @Bean
+    public BindResourceContextAspect bindResourceContextAspect() {
+        return new BindResourceContextAspect();
     }
 
     /**

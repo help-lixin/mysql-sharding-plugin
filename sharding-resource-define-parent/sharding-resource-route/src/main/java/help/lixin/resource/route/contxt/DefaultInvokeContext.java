@@ -1,13 +1,14 @@
 package help.lixin.resource.route.contxt;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultInvokeContext implements InvokeContext {
     private Method method;
     private Class<?> clazz;
     private Object instance;
-    private Map<String, Object> properties;
+    private Map<String, Object> properties = new HashMap<>();
 
     public static Build newBuild() {
         return new Build();
@@ -45,7 +46,9 @@ public class DefaultInvokeContext implements InvokeContext {
 
     @Override
     public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
+        if (null != properties) {
+            this.properties = properties;
+        }
     }
 
     @Override
@@ -57,7 +60,7 @@ public class DefaultInvokeContext implements InvokeContext {
         private Method method;
         private Class<?> clazz;
         private Object instance;
-        private Map<String, Object> properties;
+        private Map<String, Object> properties = new HashMap<>();
 
         public Build method(Method method) {
             this.method = method;
@@ -82,7 +85,9 @@ public class DefaultInvokeContext implements InvokeContext {
         }
 
         public Build properties(String key, Object value) {
-            this.properties.put(key, value);
+            if (null != key) {
+                this.properties.put(key, value);
+            }
             return this;
         }
 
