@@ -3,7 +3,7 @@
 <mapper namespace="help.lixin.sharding.resource.mapper.OrderMapper">
     <select id="selectOrderbyIds" resultType="map">
         SELECT *
-        FROM ${database}.${tablePrefix}order t
+        FROM order t
         WHERE t.order_id IN
         <foreach collection="orderIds" open="(" separator="," close=")" item="id">
             #{id}

@@ -1,0 +1,58 @@
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+
+server:
+  port: 8080
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: sharding-resource-database-demo
+  sharding:
+    resource:
+      enabled: true
+      databases:
+        - instanceName: 127.0.0.1:3306
+          resourceName: user-service
+          resourceType: master
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
+          username: root
+          password: 123456
+          properties:
+            initialSize: 1
+            maxIdle: 100
+        - instanceName: 127.0.0.1:3306
+          resourceName: user-service
+          resourceType: slave
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
+          username: root
+          password: 123456
+          properties:
+            initialSize: 1
+            maxIdle: 100
+        - instanceName: 127.0.0.1:3306
+          resourceName: user-service
+          resourceType: slave
+          type: com.zaxxer.hikari.HikariDataSource
+          driver: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
+          username: root
+          password: 123456
+          properties:
+            initialSize: 2
+            maxIdle: 100
+
+logging:
+  level:
+    help:
+      lixin:
+        sharding:
+          resource:
+            mapper: debug

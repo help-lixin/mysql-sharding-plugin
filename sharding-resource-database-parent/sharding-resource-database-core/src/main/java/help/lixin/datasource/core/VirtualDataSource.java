@@ -71,7 +71,10 @@ public class VirtualDataSource implements DataSource {
         ResourceContextInfo ctx = ResourceContext.get();
         if (null != ctx && (ctx instanceof DBResourceContextInfo)) {
             DBResourceContextInfo dbCtx = (DBResourceContextInfo) ctx;
-            return virtuaDataSourceDelegator.getConnection(dbCtx);
+            // 真实连接
+            Connection targetConnection = virtuaDataSourceDelegator.getConnection(dbCtx);
+            ConnectionProxy connectionProxy = new ConnectionProxy(targetConnection);
+            return connectionProxy;
         } else {
             logger.warn("请求获取连接失败,不存在DBResourceContextInfo对象.");
             throw new SQLException("请求获取连接失败,不存在DBResourceContextInfo对象.");
