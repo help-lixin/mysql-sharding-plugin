@@ -67,26 +67,29 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
     <version>1.0.0</version>
 </dependency>
 <dependency>
-<groupId>com.google.guava</groupId>
-<artifactId>guava</artifactId>
-<version>30.1.1-jre</version>
+   <groupId>com.google.guava</groupId>
+   <artifactId>guava</artifactId>
+   <version>30.1.1-jre</version>
 </dependency>
 
-        <!-- 以下内容,根据你自己的情况添加 -->
+
+<!-- druid是必须要的因为底层利用了它对SQL进行解析,并重写SQL语句. --> 
 <dependency>
-<groupId>com.alibaba</groupId>
-<artifactId>druid</artifactId>
-<version>1.1.22</version>
+   <groupId>com.alibaba</groupId>
+   <artifactId>druid</artifactId>
+   <version>1.1.22</version>
 </dependency>
+
+<!-- 以下内容,根据你自己的情况添加 -->
 <dependency>
-<groupId>com.zaxxer</groupId>
-<artifactId>HikariCP</artifactId>
-<version>3.2.0</version>
+   <groupId>com.zaxxer</groupId>
+   <artifactId>HikariCP</artifactId>
+   <version>3.2.0</version>
 </dependency>
 
 <dependency>
-<groupId>mysql</groupId>
-<artifactId>mysql-connector-java</artifactId>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
 </dependency>
 ```
 
@@ -106,10 +109,6 @@ spring:
 
 ```yaml
 spring:
-  main:
-    allow-bean-definition-overriding: true
-  application:
-    name: sharding-resource-database-demo
   sharding:
     resource:
       enabled: true
@@ -148,5 +147,4 @@ spring:
             initialSize: 2
             maxIdle: 100
 ```
-
 ### 6. 总结
