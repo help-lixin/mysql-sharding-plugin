@@ -1,8 +1,8 @@
 package help.lixin.resource.bindings;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.datasource.context.DBResourceContext;
+import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.context.ResourceContext;
-import help.lixin.resource.context.ResourceContextInfo;
 
 import java.util.Map;
 
@@ -11,12 +11,12 @@ public class MyBatisBindingsVariable implements IBindingsVariable {
     public void bindings(Map<String, Object> bindings) {
         // 增加从线程上下文获得变量信息
         // lixin 2021/11/21
-        ResourceContextInfo tmp = ResourceContext.get();
-        if (null != tmp && tmp instanceof DBResourceContextInfo
+        ResourceContext tmp = ResourceContextHolder.get();
+        if (null != tmp && tmp instanceof DBResourceContext
                 && !bindings.containsKey("database")
                 && !bindings.containsKey("tablePrefix")
         ) {
-            DBResourceContextInfo ctx = (DBResourceContextInfo) tmp;
+            DBResourceContext ctx = (DBResourceContext) tmp;
             String tenantId = ctx.getTenantId();
             String database = ctx.getDatabase();
             String tablePrefix = ctx.getTablePrefix();

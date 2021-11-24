@@ -1,10 +1,9 @@
 package help.lixin.datasource.manager.impl;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
 import help.lixin.datasource.manager.IDataSourceController;
 import help.lixin.datasource.manager.store.IDataSourceStore;
-import help.lixin.resource.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +37,7 @@ public class DefaultDataSourceController implements IDataSourceController {
     }
 
     @Override
-    public Optional<DataSource> getDataSource(DBResourceContextInfo ctx) throws SQLException {
+    public Optional<DataSource> getDataSource(DBResourceContext ctx) throws SQLException {
         String key = keyGenerateStrategy.generate(ctx);
         List<DataSource> dataSources = dataSourceStore.getDataSources(key);
         // 至少要有一个数据源

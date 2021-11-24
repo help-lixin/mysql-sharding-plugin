@@ -1,9 +1,6 @@
 package help.lixin.datasource.mybatis.scripting.xmltags;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
 import help.lixin.resource.bindings.IBindingsVariable;
-import help.lixin.resource.context.ResourceContext;
-import help.lixin.resource.context.ResourceContextInfo;
 import org.apache.ibatis.parsing.GenericTokenParser;
 import org.apache.ibatis.parsing.TokenHandler;
 import org.apache.ibatis.scripting.ScriptingException;
@@ -12,7 +9,6 @@ import org.apache.ibatis.scripting.xmltags.OgnlCache;
 import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.type.SimpleTypeRegistry;
 
-import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.regex.Pattern;
 

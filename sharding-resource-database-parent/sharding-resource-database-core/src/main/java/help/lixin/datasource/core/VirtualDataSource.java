@@ -1,8 +1,8 @@
 package help.lixin.datasource.core;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.datasource.context.DBResourceContext;
+import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.context.ResourceContext;
-import help.lixin.resource.context.ResourceContextInfo;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
@@ -68,9 +68,9 @@ public class VirtualDataSource implements DataSource {
 
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
-        ResourceContextInfo ctx = ResourceContext.get();
-        if (null != ctx && (ctx instanceof DBResourceContextInfo)) {
-            DBResourceContextInfo dbCtx = (DBResourceContextInfo) ctx;
+        ResourceContext ctx = ResourceContextHolder.get();
+        if (null != ctx && (ctx instanceof DBResourceContext)) {
+            DBResourceContext dbCtx = (DBResourceContext) ctx;
             // 真实连接
             Connection targetConnection = virtuaDataSourceDelegator.getConnection(dbCtx);
             ConnectionProxy connectionProxy = new ConnectionProxy(targetConnection);

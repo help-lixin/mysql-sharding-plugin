@@ -1,6 +1,6 @@
 package help.lixin.datasource.core.impl;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
 import help.lixin.datasource.manager.IDataSourceController;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class VirtuaDataSourceDelegator implements IVirtuaDataSourceDelegator {
 
 
     @Override
-    public Connection getConnection(DBResourceContextInfo ctx) throws SQLException {
+    public Connection getConnection(DBResourceContext ctx) throws SQLException {
         Optional<DataSource> optionalDataSource = dataSourceController.getDataSource(ctx);
         if (optionalDataSource.isPresent()) {
             DataSource dataSource = optionalDataSource.get();

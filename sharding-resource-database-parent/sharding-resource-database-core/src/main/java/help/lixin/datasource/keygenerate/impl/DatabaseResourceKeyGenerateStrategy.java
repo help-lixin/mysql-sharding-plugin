@@ -1,6 +1,5 @@
 package help.lixin.datasource.keygenerate.impl;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
 import help.lixin.datasource.keygenerate.AbstractKeyGenerateStrategy;
 import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
 import help.lixin.datasource.model.DatabaseResource;

@@ -2,7 +2,7 @@ package help.lixin.resource.context;
 
 import java.util.*;
 
-public abstract class AbstractResourceContextInfo implements ResourceContextInfo {
+public abstract class AbstractResourceContext implements ResourceContext {
     protected String tenantId;
     protected String microServiceName;
     protected String env;
@@ -49,7 +49,7 @@ public abstract class AbstractResourceContextInfo implements ResourceContextInfo
             return this;
         }
 
-        public abstract ResourceContextInfo build();
+        public abstract ResourceContext build();
     }
 
     @Override

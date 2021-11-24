@@ -32,15 +32,6 @@
             <groupId>help.lixin.sharding.resource</groupId>
             <version>${project.version}</version>
         </dependency>
-
-        <!--
-        <dependency>
-            <groupId>help.lixin.sharding.resource</groupId>
-            <artifactId>sharding-resource-database-mybatis</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

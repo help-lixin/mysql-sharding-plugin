@@ -1,20 +1,41 @@
 package help.lixin.resource.context;
 
-/**
- * 资源上下文
- */
-public abstract class ResourceContext {
-    private static final ThreadLocal<ResourceContextInfo> CTX = new InheritableThreadLocal<>();
+import java.util.List;
+import java.util.Map;
 
-    public static void bind(ResourceContextInfo context) {
-        CTX.set(context);
-    }
+public interface ResourceContext {
 
-    public static ResourceContextInfo get() {
-        return CTX.get();
-    }
+    /**
+     * 区域(比如:北京)
+     *
+     * @param region
+     */
+    public void setRegion(String region);
 
-    public static void unBind() {
-        CTX.remove();
-    }
+    public String getRegion();
+
+    /**
+     * 机房(比如:机房1)
+     *
+     * @param zone
+     */
+    public void setZone(String zone);
+
+    public String getZone();
+
+    public void setTenantId(String tenantId);
+
+    public String getTenantId();
+
+    public void setMicroServiceName(String microServiceName);
+
+    public String getMicroServiceName();
+
+    public void setEnv(String env);
+
+    public List<String> getEnv();
+
+    public void setProperties(Map<String, String> properties);
+
+    public Map<String, String> getProperties();
 }

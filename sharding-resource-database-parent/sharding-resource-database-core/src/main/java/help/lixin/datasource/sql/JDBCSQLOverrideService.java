@@ -4,9 +4,9 @@ import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlASTVisitorAdapter;
-import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.datasource.context.DBResourceContext;
+import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.context.ResourceContext;
-import help.lixin.resource.context.ResourceContextInfo;
 import help.lixin.resource.sql.ISQLOverrideService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +36,10 @@ public class JDBCSQLOverrideService implements ISQLOverrideService {
 
 class TestMySqlASTVisitorAdapter extends MySqlASTVisitorAdapter {
     public boolean visit(SQLExprTableSource x) {
-        ResourceContextInfo tmp = ResourceContext.get();
-        if (null != tmp && tmp instanceof DBResourceContextInfo
+        ResourceContext tmp = ResourceContextHolder.get();
+        if (null != tmp && tmp instanceof DBResourceContext
         ) {
-            DBResourceContextInfo ctx = (DBResourceContextInfo) tmp;
+            DBResourceContext ctx = (DBResourceContext) tmp;
             String database = ctx.getDatabase();
             String tablePrefix = ctx.getTablePrefix();
             // 上下文中包含这些内容时,才会进行处理

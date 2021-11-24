@@ -1,6 +1,6 @@
 package help.lixin.datasource.keygenerate.impl;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.datasource.keygenerate.AbstractKeyGenerateStrategy;
 import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
 import help.lixin.resource.ResourceType;
@@ -11,10 +11,10 @@ import help.lixin.resource.ResourceType;
 public class ContextKeyGenerateStrategy extends AbstractKeyGenerateStrategy implements IKeyGenerateStrategy {
     @Override
     public String generate(Object obj) {
-        if (null == obj || !(obj instanceof DBResourceContextInfo)) {
+        if (null == obj || !(obj instanceof DBResourceContext)) {
             throw new IllegalArgumentException("生成数据源主键失败,期望请求参数为:DBResourceContextInfo");
         } else {
-            DBResourceContextInfo ctx = (DBResourceContextInfo) obj;
+            DBResourceContext ctx = (DBResourceContext) obj;
             // 租户ID
             String tenantId = ctx.getTenantId();
             // 数据库实例(192.168.1.100:3306)

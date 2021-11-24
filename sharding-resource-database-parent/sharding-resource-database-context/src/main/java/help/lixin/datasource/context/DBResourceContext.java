@@ -1,12 +1,12 @@
 package help.lixin.datasource.context;
 
-import help.lixin.resource.context.AbstractResourceContextInfo;
-import help.lixin.resource.context.ResourceContextInfo;
+import help.lixin.resource.context.AbstractResourceContext;
+import help.lixin.resource.context.ResourceContext;
 
 /**
  * 数据库资源上下文
  */
-public class DBResourceContextInfo extends AbstractResourceContextInfo implements ResourceContextInfo {
+public class DBResourceContext extends AbstractResourceContext implements ResourceContext {
     // 192.168.1.100:3306
     private String instanceName;
     // schema
@@ -62,7 +62,7 @@ public class DBResourceContextInfo extends AbstractResourceContextInfo implement
         return new Build();
     }
 
-    public static class Build extends AbstractResourceContextInfo.Build {
+    public static class Build extends AbstractResourceContext.Build {
         // 192.168.1.100:3306
         private String instanceName;
         // schema
@@ -100,8 +100,8 @@ public class DBResourceContextInfo extends AbstractResourceContextInfo implement
         }
 
         @Override
-        public ResourceContextInfo build() {
-            DBResourceContextInfo ctx = new DBResourceContextInfo();
+        public ResourceContext build() {
+            DBResourceContext ctx = new DBResourceContext();
             ctx.setTenantId(this.tenantId);
             ctx.setMicroServiceName(this.microServiceName);
             ctx.setEnv(this.env);

@@ -1,6 +1,6 @@
 package help.lixin.datasource.manager;
 
-import help.lixin.datasource.context.DBResourceContextInfo;
+import help.lixin.datasource.context.DBResourceContext;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -15,5 +15,5 @@ public interface IDataSourceController {
      * @return
      * @throws SQLException
      */
-    Optional<DataSource> getDataSource(DBResourceContextInfo ctx) throws SQLException;
+    Optional<DataSource> getDataSource(DBResourceContext ctx) throws SQLException;
 }
