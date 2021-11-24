@@ -3,7 +3,7 @@ package help.lixin.resource.route.contxt;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class ResourceContext implements IResourceContext {
+public class DefaultInvokeContext implements InvokeContext {
     private Method method;
     private Class<?> clazz;
     private Object instance;
@@ -86,8 +86,8 @@ public class ResourceContext implements IResourceContext {
             return this;
         }
 
-        public IResourceContext build() {
-            IResourceContext ctx = new ResourceContext();
+        public InvokeContext build() {
+            InvokeContext ctx = new DefaultInvokeContext();
             ctx.setMethod(this.method);
             ctx.setClazz(this.clazz);
             ctx.setInstance(this.instance);

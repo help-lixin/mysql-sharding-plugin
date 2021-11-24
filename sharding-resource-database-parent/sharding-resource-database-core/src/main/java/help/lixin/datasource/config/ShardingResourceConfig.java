@@ -19,10 +19,14 @@ import help.lixin.datasource.meta.IDataSourceMetaService;
 import help.lixin.datasource.meta.impl.CacheDataSourceMetaService;
 import help.lixin.datasource.meta.impl.EnvironmentDataSourceMetaService;
 import help.lixin.datasource.properties.ShardingResourceProperties;
+import help.lixin.datasource.route.DefaultResourceRouteService;
+import help.lixin.datasource.route.customizer.TransactionalResourceContextCustomizer;
 import help.lixin.resource.event.Event;
 import help.lixin.resource.listener.IEventListener;
 import help.lixin.resource.publisher.DefaultEventPublisher;
 import help.lixin.resource.publisher.IEventPublisher;
+import help.lixin.resource.route.IResourceContextCustomizer;
+import help.lixin.resource.route.IResourceRouteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -185,6 +189,23 @@ public class ShardingResourceConfig {
     @ConditionalOnMissingBean(name = "dataSource", value = {DataSource.class})
     public DataSource dataSource(IVirtuaDataSourceDelegator virtuaDataSourceDelegator) {
         return new VirtualDataSource(virtuaDataSourceDelegator);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = "resourceRouteService")
+    public IResourceRouteService resourceRouteService(ObjectProvider<List<IResourceContextCustomizer>> customizer) {
+        return new DefaultResourceRouteService(customizer.getIfAvailable());
+    }
+
+    /**
+     * 资源上下文自定义
+     *
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "transactionalResourceContextCustomizer")
+    public IResourceContextCustomizer transactionalResourceContextCustomizer() {
+        return new TransactionalResourceContextCustomizer();
     }
 
     /**

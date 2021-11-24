@@ -1,9 +1,9 @@
 package help.lixin.resource.route;
 
 import help.lixin.resource.context.ResourceContext;
-import help.lixin.resource.route.contxt.IResourceContext;
+import help.lixin.resource.route.contxt.InvokeContext;
 
 public interface IResourceRouteService {
     
-    ResourceContext route(IResourceContext ctx);
+    ResourceContext route(InvokeContext ctx);
 }

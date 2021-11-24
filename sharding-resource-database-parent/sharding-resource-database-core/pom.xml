@@ -36,6 +36,16 @@
             <artifactId>sharding-resource-database-meta</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>help.lixin.sharding.resource</groupId>
+            <artifactId>sharding-resource-route</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>help.lixin.sharding.resource</groupId>
+            <artifactId>sharding-resource-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -55,11 +65,6 @@
             <version>5.1.49</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>help.lixin.sharding.resource</groupId>
-            <artifactId>sharding-resource-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -70,6 +75,26 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
