@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * 主要负责根据上下文信息,获得一个DataSource
  */
-public interface IDataSourceController {
+public interface IBorrowDataSourceService {
     /**
      * @param ctx
      * @return

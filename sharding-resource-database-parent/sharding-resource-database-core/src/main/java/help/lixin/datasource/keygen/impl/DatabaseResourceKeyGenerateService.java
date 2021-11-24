@@ -1,11 +1,11 @@
-package help.lixin.datasource.keygenerate.impl;
+package help.lixin.datasource.keygen.impl;
 
-import help.lixin.datasource.keygenerate.AbstractKeyGenerateStrategy;
-import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
+import help.lixin.datasource.keygen.AbstractKeyGenerateService;
+import help.lixin.datasource.keygen.IKeyGenerateService;
 import help.lixin.datasource.model.DatabaseResource;
 import help.lixin.resource.ResourceMode;
 
-public class DatabaseResourceKeyGenerateStrategy extends AbstractKeyGenerateStrategy implements IKeyGenerateStrategy {
+public class DatabaseResourceKeyGenerateService extends AbstractKeyGenerateService implements IKeyGenerateService {
     @Override
     public String generate(Object object) {
         if (null == object || !(object instanceof DatabaseResource)) {

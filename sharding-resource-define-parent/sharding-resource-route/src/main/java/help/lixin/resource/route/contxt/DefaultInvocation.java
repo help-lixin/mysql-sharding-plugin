@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultInvokeContext implements InvokeContext {
+public class DefaultInvocation implements Invocation {
     private Method method;
     private Class<?> clazz;
     private Object instance;
@@ -91,13 +91,13 @@ public class DefaultInvokeContext implements InvokeContext {
             return this;
         }
 
-        public InvokeContext build() {
-            InvokeContext ctx = new DefaultInvokeContext();
-            ctx.setMethod(this.method);
-            ctx.setClazz(this.clazz);
-            ctx.setInstance(this.instance);
-            ctx.setProperties(this.properties);
-            return ctx;
+        public Invocation build() {
+            Invocation invocation = new DefaultInvocation();
+            invocation.setMethod(this.method);
+            invocation.setClazz(this.clazz);
+            invocation.setInstance(this.instance);
+            invocation.setProperties(this.properties);
+            return invocation;
         }
     }
 }

@@ -1,27 +1,28 @@
-package help.lixin.datasource.manager.store;
+package help.lixin.datasource.store.impl;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import help.lixin.datasource.WrapperDataSourceMeta;
+import help.lixin.datasource.store.IDataSourceStoreService;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 存储数据源信息
  */
-public class DefaultDataSourceStore implements IDataSourceStore {
+public class DefaultDataSourceStoreService implements IDataSourceStoreService {
 
     /**
      * key:   instanceName +  dataSourceName <br/>
      * value: List<DataSource> <br/>
      */
-    private final Cache<String, List<DataSource>> cache = CacheBuilder
+    private final Cache<String, List<WrapperDataSourceMeta>> cache = CacheBuilder
             .newBuilder()
             .build();
 
-    public synchronized boolean register(String key, List<DataSource> newDataSources) {
-        List<DataSource> dataSources = cache.getIfPresent(key);
+    public synchronized boolean register(String key, List<WrapperDataSourceMeta> newDataSources) {
+        List<WrapperDataSourceMeta> dataSources = cache.getIfPresent(key);
         // 先清空,后再构建
         if (null != dataSources) {
             cache.invalidate(key);
@@ -30,8 +31,8 @@ public class DefaultDataSourceStore implements IDataSourceStore {
         return true;
     }
 
-    public synchronized boolean register(String key, DataSource newDataSource) {
-        List<DataSource> dataSources = cache.getIfPresent(key);
+    public synchronized boolean register(String key, WrapperDataSourceMeta newDataSource) {
+        List<WrapperDataSourceMeta> dataSources = cache.getIfPresent(key);
         if (null == dataSources) { //key相应的数据源不存在的情况下,构建:List
             dataSources = new ArrayList<>();
             dataSources.add(newDataSource);
@@ -43,13 +44,13 @@ public class DefaultDataSourceStore implements IDataSourceStore {
     }
 
     @Override
-    public List<DataSource> unRegister(String key) {
-        List<DataSource> dataSources = cache.getIfPresent(key);
+    public synchronized List<WrapperDataSourceMeta> unRegister(String key) {
+        List<WrapperDataSourceMeta> dataSources = cache.getIfPresent(key);
         cache.invalidate(key);
         return dataSources;
     }
 
-    public List<DataSource> getDataSources(String key) {
+    public List<WrapperDataSourceMeta> getDataSources(String key) {
         return cache.getIfPresent(key);
     }
 }

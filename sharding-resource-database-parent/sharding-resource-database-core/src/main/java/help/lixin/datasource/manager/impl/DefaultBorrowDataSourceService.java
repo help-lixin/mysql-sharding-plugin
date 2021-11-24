@@ -1,9 +1,10 @@
 package help.lixin.datasource.manager.impl;
 
 import help.lixin.datasource.context.DBResourceContext;
-import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
-import help.lixin.datasource.manager.IDataSourceController;
-import help.lixin.datasource.manager.store.IDataSourceStore;
+import help.lixin.datasource.WrapperDataSourceMeta;
+import help.lixin.datasource.keygen.IKeyGenerateService;
+import help.lixin.datasource.manager.IBorrowDataSourceService;
+import help.lixin.datasource.store.IDataSourceStoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,27 +20,27 @@ import java.util.Random;
  * &nbsp;&nbsp; 1.1 读取配置信息(本地/网络),转换成业务模型(DatabaseResource),并根据DatabaseResource创建DataSource.<br/>
  * &nbsp;&nbsp; 1.2 启动一个后台线程,监听配置的变化,当配置有变化时.更新DataSource信息,注意:仅仅做局部更新(或新增),禁止销毁所有的连接. <br/>
  */
-public class DefaultDataSourceController implements IDataSourceController {
+public class DefaultBorrowDataSourceService implements IBorrowDataSourceService {
 
-    private Logger logger = LoggerFactory.getLogger(DefaultDataSourceController.class);
+    private Logger logger = LoggerFactory.getLogger(DefaultBorrowDataSourceService.class);
 
     // key生成策略
-    private IKeyGenerateStrategy keyGenerateStrategy;
+    private IKeyGenerateService contextKeyGenerateService;
 
     // 数据源存储中介中心
-    private IDataSourceStore dataSourceStore;
+    private IDataSourceStoreService dataSourceStore;
 
-    public DefaultDataSourceController(
-            IKeyGenerateStrategy keyGenerateStrategy,
-            IDataSourceStore dataSourceStore) {
+    public DefaultBorrowDataSourceService(
+            IKeyGenerateService contextKeyGenerateService,
+            IDataSourceStoreService dataSourceStore) {
         this.dataSourceStore = dataSourceStore;
-        this.keyGenerateStrategy = keyGenerateStrategy;
+        this.contextKeyGenerateService = contextKeyGenerateService;
     }
 
     @Override
     public Optional<DataSource> getDataSource(DBResourceContext ctx) throws SQLException {
-        String key = keyGenerateStrategy.generate(ctx);
-        List<DataSource> dataSources = dataSourceStore.getDataSources(key);
+        String key = contextKeyGenerateService.generate(ctx);
+        List<WrapperDataSourceMeta> dataSources = dataSourceStore.getDataSources(key);
         // 至少要有一个数据源
         if (null != dataSources && !dataSources.isEmpty() && dataSources.size() > 0) {
             // 是否为只读

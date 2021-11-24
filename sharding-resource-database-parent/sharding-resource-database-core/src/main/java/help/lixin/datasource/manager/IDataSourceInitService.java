@@ -1,6 +1,6 @@
 package help.lixin.datasource.manager;
 
-public interface IDataSourceInitController {
+public interface IDataSourceInitService {
     /**
      * 初始化数据源
      */

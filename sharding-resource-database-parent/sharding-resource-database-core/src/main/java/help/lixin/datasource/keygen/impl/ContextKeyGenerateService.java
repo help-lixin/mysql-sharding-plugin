@@ -1,14 +1,14 @@
-package help.lixin.datasource.keygenerate.impl;
+package help.lixin.datasource.keygen.impl;
 
 import help.lixin.datasource.context.DBResourceContext;
-import help.lixin.datasource.keygenerate.AbstractKeyGenerateStrategy;
-import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
+import help.lixin.datasource.keygen.AbstractKeyGenerateService;
+import help.lixin.datasource.keygen.IKeyGenerateService;
 import help.lixin.resource.ResourceMode;
 
 /**
  * 基于上下文生成key
  */
-public class ContextKeyGenerateStrategy extends AbstractKeyGenerateStrategy implements IKeyGenerateStrategy {
+public class ContextKeyGenerateService extends AbstractKeyGenerateService implements IKeyGenerateService {
     @Override
     public String generate(Object obj) {
         if (null == obj || !(obj instanceof DBResourceContext)) {

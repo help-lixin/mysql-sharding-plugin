@@ -30,7 +30,7 @@ public class App {
      */
     @Bean
     public IResourceContextCustomizer businessResourceContextCustomizer() {
-        return (invokeContext, ctxBuild) -> {
+        return (invocation, ctxBuild) -> {
             if (!(ctxBuild instanceof DBResourceContext.Build)) {
                 return;
             }

@@ -1,29 +1,29 @@
-package help.lixin.datasource.route;
+package help.lixin.datasource.build.context;
 
 import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.resource.context.ResourceContext;
 import help.lixin.resource.route.IResourceContextCustomizer;
-import help.lixin.resource.route.IResourceRouteService;
-import help.lixin.resource.route.contxt.InvokeContext;
+import help.lixin.resource.route.IBuildResourceContextService;
+import help.lixin.resource.route.contxt.Invocation;
 
 import java.util.List;
 
-public class DefaultResourceRouteService implements IResourceRouteService {
+public class DefaultBuildResourceContextService implements IBuildResourceContextService {
 
     private List<IResourceContextCustomizer> resourceContextCustomizer;
 
-    public DefaultResourceRouteService(List<IResourceContextCustomizer> resourceContextCustomizer) {
+    public DefaultBuildResourceContextService(List<IResourceContextCustomizer> resourceContextCustomizer) {
         this.resourceContextCustomizer = resourceContextCustomizer;
     }
 
     @Override
-    public ResourceContext route(InvokeContext ctx) {
+    public ResourceContext build(Invocation invocation) {
         // 1. 构建上下文的build
         DBResourceContext.Build contextBuild = DBResourceContext.newBuild();
         // 2. build的详细信息,委托给:IResourceContextCustomizer
         if (null != resourceContextCustomizer) {
             resourceContextCustomizer.forEach(item -> {
-                item.apply(ctx, contextBuild);
+                item.apply(invocation, contextBuild);
             });
         }
         // 3. 最终build

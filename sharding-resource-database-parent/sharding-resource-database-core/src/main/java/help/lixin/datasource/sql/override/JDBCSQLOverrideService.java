@@ -1,4 +1,4 @@
-package help.lixin.datasource.sql;
+package help.lixin.datasource.sql.override;
 
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
@@ -23,7 +23,7 @@ public class JDBCSQLOverrideService implements ISQLOverrideService {
     @Override
     public String override(Connection connection, String sql) {
         List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DB_TYPE);
-        MySqlASTVisitorAdapter visitor = new TestMySqlASTVisitorAdapter();
+        MySqlASTVisitorAdapter visitor = new TableOverrideMySqlASTVisitorAdapter();
         for (SQLStatement sqlStatement : sqlStatements) {
             sqlStatement.accept(visitor);
         }
@@ -35,7 +35,7 @@ public class JDBCSQLOverrideService implements ISQLOverrideService {
     }
 }
 
-class TestMySqlASTVisitorAdapter extends MySqlASTVisitorAdapter {
+class TableOverrideMySqlASTVisitorAdapter extends MySqlASTVisitorAdapter {
     public boolean visit(SQLExprTableSource x) {
         ResourceContext tmp = ResourceContextHolder.get();
         if (null != tmp && tmp instanceof DBResourceContext

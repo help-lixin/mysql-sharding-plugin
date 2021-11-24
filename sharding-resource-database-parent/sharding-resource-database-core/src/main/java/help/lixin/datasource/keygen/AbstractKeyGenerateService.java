@@ -1,6 +1,6 @@
-package help.lixin.datasource.keygenerate;
+package help.lixin.datasource.keygen;
 
-public abstract class AbstractKeyGenerateStrategy implements IKeyGenerateStrategy {
+public abstract class AbstractKeyGenerateService implements IKeyGenerateService {
 
     protected static final String DEFAULT_FORMAT = "%s/%s/%s";
 

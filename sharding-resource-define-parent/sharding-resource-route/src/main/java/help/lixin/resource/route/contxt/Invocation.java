@@ -3,7 +3,7 @@ package help.lixin.resource.route.contxt;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public interface InvokeContext {
+public interface Invocation {
     void setMethod(Method method);
 
     Method getMethod();

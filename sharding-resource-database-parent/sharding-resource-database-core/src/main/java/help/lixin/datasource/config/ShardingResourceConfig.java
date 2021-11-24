@@ -2,32 +2,32 @@ package help.lixin.datasource.config;
 
 import help.lixin.datasource.aop.BindResourceContextAspect;
 import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
-import help.lixin.datasource.core.VirtualDataSource;
+import help.lixin.datasource.VirtualDataSource;
 import help.lixin.datasource.core.impl.VirtuaDataSourceDelegator;
 import help.lixin.datasource.customizer.IDataSourceCustomizer;
 import help.lixin.datasource.customizer.impl.DruidDataSourceCustomizer;
 import help.lixin.datasource.customizer.impl.HikariCPDataSourceCustomizer;
-import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
-import help.lixin.datasource.keygenerate.impl.ContextKeyGenerateStrategy;
-import help.lixin.datasource.keygenerate.impl.DatabaseResourceKeyGenerateStrategy;
-import help.lixin.datasource.manager.IDataSourceController;
-import help.lixin.datasource.manager.IDataSourceInitController;
-import help.lixin.datasource.manager.impl.DataSourceInitController;
-import help.lixin.datasource.manager.impl.DefaultDataSourceController;
-import help.lixin.datasource.manager.store.DefaultDataSourceStore;
-import help.lixin.datasource.manager.store.IDataSourceStore;
+import help.lixin.datasource.keygen.IKeyGenerateService;
+import help.lixin.datasource.keygen.impl.ContextKeyGenerateService;
+import help.lixin.datasource.keygen.impl.DatabaseResourceKeyGenerateService;
+import help.lixin.datasource.manager.IBorrowDataSourceService;
+import help.lixin.datasource.manager.IDataSourceInitService;
+import help.lixin.datasource.manager.impl.DataSourceInitService;
+import help.lixin.datasource.manager.impl.DefaultBorrowDataSourceService;
+import help.lixin.datasource.store.impl.DefaultDataSourceStoreService;
+import help.lixin.datasource.store.IDataSourceStoreService;
 import help.lixin.datasource.meta.IDataSourceMetaService;
 import help.lixin.datasource.meta.impl.CacheDataSourceMetaService;
 import help.lixin.datasource.meta.impl.EnvironmentDataSourceMetaService;
 import help.lixin.datasource.properties.ShardingResourceProperties;
-import help.lixin.datasource.route.DefaultResourceRouteService;
-import help.lixin.datasource.route.customizer.TransactionalResourceContextCustomizer;
+import help.lixin.datasource.build.context.DefaultBuildResourceContextService;
+import help.lixin.datasource.build.context.customizer.TransactionalResourceContextCustomizer;
 import help.lixin.resource.event.Event;
 import help.lixin.resource.listener.IEventListener;
 import help.lixin.resource.publisher.DefaultEventPublisher;
 import help.lixin.resource.publisher.IEventPublisher;
 import help.lixin.resource.route.IResourceContextCustomizer;
-import help.lixin.resource.route.IResourceRouteService;
+import help.lixin.resource.route.IBuildResourceContextService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -55,9 +55,9 @@ public class ShardingResourceConfig {
      * @return
      */
     @Bean
-    @ConditionalOnMissingBean(name = "databaseResourceKeyGenerateStrategy")
-    public IKeyGenerateStrategy databaseResourceKeyGenerateStrategy() {
-        return new DatabaseResourceKeyGenerateStrategy();
+    @ConditionalOnMissingBean(name = "databaseResourceKeyGenerateService")
+    public IKeyGenerateService databaseResourceKeyGenerateService() {
+        return new DatabaseResourceKeyGenerateService();
     }
 
     /**
@@ -66,9 +66,9 @@ public class ShardingResourceConfig {
      * @return
      */
     @Bean
-    @ConditionalOnMissingBean(name = "contextKeyGenerateStrategy")
-    public IKeyGenerateStrategy contextKeyGenerateStrategy() {
-        return new ContextKeyGenerateStrategy();
+    @ConditionalOnMissingBean(name = "contextKeyGenerateService")
+    public IKeyGenerateService contextKeyGenerateService() {
+        return new ContextKeyGenerateService();
     }
 
 
@@ -102,8 +102,8 @@ public class ShardingResourceConfig {
      */
     @Bean
     @ConditionalOnMissingBean
-    public IDataSourceStore dataSourceStore() {
-        return new DefaultDataSourceStore();
+    public IDataSourceStoreService dataSourceStoreService() {
+        return new DefaultDataSourceStoreService();
     }
 
     /**
@@ -135,38 +135,38 @@ public class ShardingResourceConfig {
      * 数据源的初始化处理
      *
      * @param dataSourceMetaService
-     * @param databaseResourceKeyGenerateStrategy
-     * @param dataSourceStore
+     * @param databaseResourceKeyGenerateService
+     * @param dataSourceStoreService
      * @param dataSourceCustomizers
      * @return
      */
     @Bean
     @ConditionalOnMissingBean
-    public IDataSourceInitController dataSourceInitController(
+    public IDataSourceInitService dataSourceInitService(
             IDataSourceMetaService dataSourceMetaService,
             @Autowired
-            @Qualifier("databaseResourceKeyGenerateStrategy")
-                    IKeyGenerateStrategy databaseResourceKeyGenerateStrategy,
-            IDataSourceStore dataSourceStore,
+            @Qualifier("databaseResourceKeyGenerateService")
+                    IKeyGenerateService databaseResourceKeyGenerateService,
+            IDataSourceStoreService dataSourceStoreService,
             ObjectProvider<List<IDataSourceCustomizer>> dataSourceCustomizers) {
-        return new DataSourceInitController(dataSourceMetaService, databaseResourceKeyGenerateStrategy, dataSourceStore, dataSourceCustomizers.getIfAvailable());
+        return new DataSourceInitService(dataSourceMetaService, databaseResourceKeyGenerateService, dataSourceStoreService, dataSourceCustomizers.getIfAvailable());
     }
 
     /**
      * 数据源的获取控制
      *
-     * @param contextKeyGenerateStrategy
+     * @param contextKeyGenerateService
      * @param dataSourceStore
      * @return
      */
     @Bean
     @ConditionalOnMissingBean
-    public IDataSourceController dataSourceController(
+    public IBorrowDataSourceService borrowDataSourceService(
             @Autowired
-            @Qualifier("contextKeyGenerateStrategy")
-                    IKeyGenerateStrategy contextKeyGenerateStrategy,
-            IDataSourceStore dataSourceStore) {
-        return new DefaultDataSourceController(contextKeyGenerateStrategy, dataSourceStore);
+            @Qualifier("contextKeyGenerateService")
+                    IKeyGenerateService contextKeyGenerateService,
+            IDataSourceStoreService dataSourceStore) {
+        return new DefaultBorrowDataSourceService(contextKeyGenerateService, dataSourceStore);
     }
 
     /**
@@ -176,8 +176,8 @@ public class ShardingResourceConfig {
      */
     @Bean
     @ConditionalOnMissingBean(name = "virtuaDataSourceDelegator")
-    public IVirtuaDataSourceDelegator virtuaDataSourceDelegator(IDataSourceController dataSourceController) {
-        return new VirtuaDataSourceDelegator(dataSourceController);
+    public IVirtuaDataSourceDelegator virtuaDataSourceDelegator(IBorrowDataSourceService borrowDataSourceService) {
+        return new VirtuaDataSourceDelegator(borrowDataSourceService);
     }
 
     /**
@@ -193,9 +193,9 @@ public class ShardingResourceConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(name = "resourceRouteService")
-    public IResourceRouteService resourceRouteService(ObjectProvider<List<IResourceContextCustomizer>> customizer) {
-        return new DefaultResourceRouteService(customizer.getIfAvailable());
+    @ConditionalOnMissingBean(name = "buildResourceContextService")
+    public IBuildResourceContextService buildResourceContextService(ObjectProvider<List<IResourceContextCustomizer>> customizers) {
+        return new DefaultBuildResourceContextService(customizers.getIfAvailable());
     }
 
     /**
@@ -253,11 +253,11 @@ public class ShardingResourceConfig {
     @Configuration
     public class ConfigurationDataSourceInit {
         @Autowired
-        private IDataSourceInitController dataSourceInitController;
+        private IDataSourceInitService dataSourceInitService;
 
         @PostConstruct
         public void init() {
-            dataSourceInitController.initDataSources();
+            dataSourceInitService.initDataSources();
         }
     }
 

@@ -1,3 +1,6 @@
+help/lixin/sharding/resource/controller/OrderController.class
 help/lixin/sharding/resource/App.class
+help/lixin/sharding/resource/service/impl/OrderService.class
 help/lixin/sharding/resource/mapper/OrderMapper.class
 help/lixin/sharding/resource/mapper/UserMapper.class
+help/lixin/sharding/resource/service/IOrderService.class

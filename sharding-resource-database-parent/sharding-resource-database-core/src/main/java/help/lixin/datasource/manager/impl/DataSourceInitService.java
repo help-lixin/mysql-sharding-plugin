@@ -1,9 +1,10 @@
 package help.lixin.datasource.manager.impl;
 
+import help.lixin.datasource.WrapperDataSourceMeta;
 import help.lixin.datasource.customizer.IDataSourceCustomizer;
-import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
-import help.lixin.datasource.manager.IDataSourceInitController;
-import help.lixin.datasource.manager.store.IDataSourceStore;
+import help.lixin.datasource.keygen.IKeyGenerateService;
+import help.lixin.datasource.manager.IDataSourceInitService;
+import help.lixin.datasource.store.IDataSourceStoreService;
 import help.lixin.datasource.meta.IDataSourceMetaService;
 import help.lixin.datasource.model.DatabaseResource;
 import help.lixin.datasource.util.DataSourceUtil;
@@ -15,25 +16,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class DataSourceInitController implements IDataSourceInitController {
+public class DataSourceInitService implements IDataSourceInitService {
 
-    private Logger logger = LoggerFactory.getLogger(DataSourceInitController.class);
+    private Logger logger = LoggerFactory.getLogger(DataSourceInitService.class);
 
     // 元数据存储中心
     private IDataSourceMetaService dataSourceMetaService;
     // id生成策略
-    private IKeyGenerateStrategy keyGenerateStrategy;
+    private IKeyGenerateService contextKeyGenerateService;
     // 数据源的存储中心
-    private IDataSourceStore dataSourceStore;
+    private IDataSourceStoreService dataSourceStore;
     // 自定义创建DataSource的详细过程
     private List<IDataSourceCustomizer> dataSourceCustomizers;
 
-    public DataSourceInitController(IDataSourceMetaService dataSourceMetaService,
-                                    IKeyGenerateStrategy keyGenerateStrategy,
-                                    IDataSourceStore dataSourceStore,
-                                    List<IDataSourceCustomizer> dataSourceCustomizers) {
+    public DataSourceInitService(IDataSourceMetaService dataSourceMetaService,
+                                 IKeyGenerateService contextKeyGenerateService,
+                                 IDataSourceStoreService dataSourceStore,
+                                 List<IDataSourceCustomizer> dataSourceCustomizers) {
         this.dataSourceMetaService = dataSourceMetaService;
-        this.keyGenerateStrategy = keyGenerateStrategy;
+        this.contextKeyGenerateService = contextKeyGenerateService;
         this.dataSourceStore = dataSourceStore;
         this.dataSourceCustomizers = dataSourceCustomizers;
     }
@@ -49,13 +50,16 @@ public class DataSourceInitController implements IDataSourceInitController {
                 initDataSource(databaseResource)
                         .ifPresent(datasource -> {
                             this.customizer(databaseResource, datasource);
-                            
+
                             // 2. 生成key
-                            String key = keyGenerateStrategy.generate(databaseResource);
+                            String key = contextKeyGenerateService.generate(databaseResource);
                             if (logger.isInfoEnabled()) {
                                 logger.info("初始化数据源名称:[{}]成功.", key);
                             }
-                            dataSourceStore.register(key, datasource);
+
+                            // 3. 通过DataSourceWrapper包裹一次DataSource
+                            WrapperDataSourceMeta wrapperDataSourceMeta = new WrapperDataSourceMeta(datasource, databaseResource);
+                            dataSourceStore.register(key, wrapperDataSourceMeta);
                         });
             }
         }

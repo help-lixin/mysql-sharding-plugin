@@ -2,9 +2,9 @@ package help.lixin.datasource.aop;
 
 import help.lixin.resource.context.ResourceContext;
 import help.lixin.resource.context.ResourceContextHolder;
-import help.lixin.resource.route.IResourceRouteService;
-import help.lixin.resource.route.contxt.DefaultInvokeContext;
-import help.lixin.resource.route.contxt.InvokeContext;
+import help.lixin.resource.route.IBuildResourceContextService;
+import help.lixin.resource.route.contxt.DefaultInvocation;
+import help.lixin.resource.route.contxt.Invocation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 public class BindResourceContextAspect {
 
     @Autowired
-    private IResourceRouteService resourceRouteService;
+    private IBuildResourceContextService buildResourceContextService;
 
     @Pointcut("@within(org.springframework.transaction.annotation.Transactional) || @annotation(org.springframework.transaction.annotation.Transactional)")
     public void bindResourceContextPointcut() {
@@ -33,10 +33,10 @@ public class BindResourceContextAspect {
 
     @Around("bindResourceContextPointcut()")
     public Object exec(final ProceedingJoinPoint point) throws Throwable {
-        // 1. 构建:InvokeContext
-        InvokeContext invokeContext = buildContext(point);
-        // 2. 委托给:IResourceRouteService构建:ResourceContext
-        ResourceContext resourceContext = resourceRouteService.route(invokeContext);
+        // 1. 构建:Invocation
+        Invocation invocation = buildContext(point);
+        // 2. 委托给:IBuildResourceContextService构建:ResourceContext
+        ResourceContext resourceContext = buildResourceContextService.build(invocation);
         try {
             // 3. 绑定信息到上下文中
             ResourceContextHolder.bind(resourceContext);
@@ -47,7 +47,7 @@ public class BindResourceContextAspect {
         }
     }
 
-    protected InvokeContext buildContext(final ProceedingJoinPoint point) {
+    protected Invocation buildContext(final ProceedingJoinPoint point) {
         MethodSignature methodSignature = (MethodSignature) point.getSignature();
         Method method = methodSignature.getMethod();
         Object target = point.getTarget();
@@ -57,11 +57,11 @@ public class BindResourceContextAspect {
             clazz = AopUtils.getTargetClass(point.getTarget());
         }
         // 构建上下文
-        InvokeContext ctx = DefaultInvokeContext.newBuild()
+        Invocation ctx = DefaultInvocation.newBuild()
                 .clazz(clazz)
                 .method(method)
                 .instance(target)
-                .properties("self", point)
+                .properties("_self", point)
                 .build();
         return ctx;
     }

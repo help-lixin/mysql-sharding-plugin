@@ -1,6 +1,7 @@
-package help.lixin.datasource.core;
+package help.lixin.datasource;
 
 import help.lixin.datasource.context.DBResourceContext;
+import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
 import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.context.ResourceContext;
 import org.slf4j.LoggerFactory;
@@ -75,8 +76,8 @@ public class VirtualDataSource implements DataSource {
             // 真实连接
             Optional<Connection> targetConnection = virtuaDataSourceDelegator.getConnection(dbCtx);
             if (targetConnection.isPresent()) {
-                ConnectionProxy connectionProxy = new ConnectionProxy(targetConnection.get());
-                return connectionProxy;
+                ProxyConnection proxyConnection = new ProxyConnection(targetConnection.get());
+                return proxyConnection;
             } else {
                 logger.warn("从DBResourceContextInfo[{}]上下文获取信息失败.", dbCtx);
                 throw new SQLException("请求获取连接失败,不存在DBResourceContextInfo对象.");
