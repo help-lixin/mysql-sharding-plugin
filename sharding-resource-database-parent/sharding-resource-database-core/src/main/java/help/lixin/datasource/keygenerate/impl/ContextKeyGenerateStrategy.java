@@ -3,7 +3,7 @@ package help.lixin.datasource.keygenerate.impl;
 import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.datasource.keygenerate.AbstractKeyGenerateStrategy;
 import help.lixin.datasource.keygenerate.IKeyGenerateStrategy;
-import help.lixin.resource.ResourceType;
+import help.lixin.resource.ResourceMode;
 
 /**
  * 基于上下文生成key
@@ -24,7 +24,7 @@ public class ContextKeyGenerateStrategy extends AbstractKeyGenerateStrategy impl
             // 是否为只读
             boolean readOnly = ctx.isReadOnly();
             // 模式
-            ResourceType mode = readOnly ? ResourceType.SLAVE : ResourceType.MASTER;
+            ResourceMode mode = readOnly ? ResourceMode.R : ResourceMode.RW;
             String format = generate0(instanceName, dataSourceName, mode.name());
             return format;
         }

@@ -24,12 +24,12 @@ public class VirtuaDataSourceDelegator implements IVirtuaDataSourceDelegator {
 
 
     @Override
-    public Connection getConnection(DBResourceContext ctx) throws SQLException {
+    public Optional<Connection> getConnection(DBResourceContext ctx) throws SQLException {
         Optional<DataSource> optionalDataSource = dataSourceController.getDataSource(ctx);
         if (optionalDataSource.isPresent()) {
             DataSource dataSource = optionalDataSource.get();
-            return dataSource.getConnection();
+            return Optional.of(dataSource.getConnection());
         }
-        return null;
+        return Optional.empty();
     }
 }

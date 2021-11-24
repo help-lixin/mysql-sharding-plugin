@@ -1,6 +1,8 @@
 package help.lixin.resource.sql;
 
 
+import java.sql.Connection;
+
 public interface ISQLOverrideService {
 
     /**
@@ -9,6 +11,6 @@ public interface ISQLOverrideService {
      * @param sql
      * @return
      */
-    String override(String sql);
+    String override(Connection connection, String sql);
 
 }

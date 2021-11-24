@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class VirtualDataSource implements DataSource {
@@ -72,9 +73,14 @@ public class VirtualDataSource implements DataSource {
         if (null != ctx && (ctx instanceof DBResourceContext)) {
             DBResourceContext dbCtx = (DBResourceContext) ctx;
             // 真实连接
-            Connection targetConnection = virtuaDataSourceDelegator.getConnection(dbCtx);
-            ConnectionProxy connectionProxy = new ConnectionProxy(targetConnection);
-            return connectionProxy;
+            Optional<Connection> targetConnection = virtuaDataSourceDelegator.getConnection(dbCtx);
+            if (targetConnection.isPresent()) {
+                ConnectionProxy connectionProxy = new ConnectionProxy(targetConnection.get());
+                return connectionProxy;
+            } else {
+                logger.warn("从DBResourceContextInfo[{}]上下文获取信息失败.", dbCtx);
+                throw new SQLException("请求获取连接失败,不存在DBResourceContextInfo对象.");
+            }
         } else {
             logger.warn("请求获取连接失败,不存在DBResourceContextInfo对象.");
             throw new SQLException("请求获取连接失败,不存在DBResourceContextInfo对象.");

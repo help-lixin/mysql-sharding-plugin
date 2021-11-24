@@ -11,6 +11,7 @@ import help.lixin.resource.sql.ISQLOverrideService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class JDBCSQLOverrideService implements ISQLOverrideService {
@@ -20,7 +21,7 @@ public class JDBCSQLOverrideService implements ISQLOverrideService {
     private static final String DB_TYPE = "mysql";
 
     @Override
-    public String override(String sql) {
+    public String override(Connection connection, String sql) {
         List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DB_TYPE);
         MySqlASTVisitorAdapter visitor = new TestMySqlASTVisitorAdapter();
         for (SQLStatement sqlStatement : sqlStatements) {

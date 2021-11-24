@@ -101,7 +101,7 @@ spring:
 
 3) 配置数据源
 
-> 默认情况下定位数据源的唯一定位是通过:${instanceName}/${resourceName}/${resourceType},你可以根据你自己的需求,进行组合.
+> 默认情况下定位数据源的唯一定位是通过:${instanceName}/${resourceName}/${resourceMode},你可以根据你自己的需求,进行组合.
 > 在这里主要配置了3个数据源.
 
 ```yaml
@@ -116,7 +116,7 @@ spring:
       databases:
         - instanceName: 127.0.0.1:3306
           resourceName: user-service
-          resourceType: master
+          mode: rw
           type: com.alibaba.druid.pool.DruidDataSource
           driver: com.mysql.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
@@ -127,7 +127,7 @@ spring:
             maxIdle: 100
         - instanceName: 127.0.0.1:3306
           resourceName: user-service
-          resourceType: slave
+          mode: r
           type: com.alibaba.druid.pool.DruidDataSource
           driver: com.mysql.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
@@ -138,7 +138,7 @@ spring:
             maxIdle: 100
         - instanceName: 127.0.0.1:3306
           resourceName: user-service
-          resourceType: slave
+          mode: r
           type: com.zaxxer.hikari.HikariDataSource
           driver: com.mysql.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
