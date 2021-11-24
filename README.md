@@ -1,11 +1,30 @@
-### 1. 背景
+### 1. 现有数据分片比较
 
-### 2. 实现思路
-1) 项目启动时,初始化数据源(本地配置/远程),数据源的资源唯一名称为(${instanceName}/${resourceName}/${resourceType}),你可以自己实现IKeyGenerateStrategy类自定义配置. 
-2) 拦截@Transaction,向上下文填充这次请求(DBResourceContext),将需要使用哪个数据源.     
-3) 对DataSource和Connection进行了代理,对SQL进行拦截,添加:库前缀和表前缀.  
+现在市面上的数据分片框架有些?
 
-### 3. 项目工程结构介绍
+1) 代理模式(MyCat/ShardingProxy)优缺点:        
+   1.1) 优点:开发透明(无侵入式)   
+   1.2) 优点:支持多种编程语言.       
+   1.2) 缺点:代理模式是一种中心式管理模式,代理机器后面的任何一台机器出现问题,都有可能造成代理模式出现问题.       
+   1.3) 缺点:代理模式机器的配置要求比较高(CPU/内存),而且,需要多台配置VIP飘移.
+
+2) 边车模式(Sharding JDBC/TDDL)优缺点:         
+   2.1) 优点:解决了代理模式的问题.     
+   2.2) 缺点:与具体的编程语言相关.  
+   2.3) 缺点:分片算法比较简单.
+
+### 2. 为什么需要自研
+
+### 3. 实现思路
+
+1) 定义N个数据库实例(3306),每个实例上100个库,租户在入驻时,记录租户对应的信息(数据库实例/schema),这个租户下的用户登录时,都会带上这些信息(建议无状态代,并加密).
+2) 应用启动时,根据条件(spring.sharding.resource.env=jd,taobao)初始化数据源(本地配置/远程拉取配置),数据源的资源唯一名称为(
+   ${instanceName}/${resourceName}/${resourceType}),你可以自己实现IKeyGenerateStrategy类自定义配置.
+3) 拦截注解@Transaction,向上下文填充这次请求(DBResourceContext),将需要使用具体哪一个数据源.
+4) 对DataSource和Connection进行了代理,拦截SQL语句,添加:库前缀和表前缀. 
+
+### 4. 项目工程结构介绍
+
 ```shell
 lixin-macbook:sharding-resource-parent lixin$ tree -L 2
 .
@@ -35,48 +54,56 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
     ├── pom.xml
     └── src
 ```
-### 4. 集成步骤
-1) 添加依赖
-```xml
-    <!-- 必须要添加的依赖为以下内容 --> 
-    <dependency>
-        <groupId>help.lixin.sharding.resource</groupId>    
-        <artifactId>sharding-resource-spring-boot-starter</artifactId>
-        <version>1.0.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>30.1.1-jre</version>
-    </dependency>
-    
-    <!-- 以下内容,根据你自己的情况添加 -->
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>druid</artifactId>
-        <version>1.1.22</version>
-    </dependency>
-    <dependency>
-        <groupId>com.zaxxer</groupId>
-        <artifactId>HikariCP</artifactId>
-        <version>3.2.0</version>
-    </dependency>
 
-    <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-    </dependency>
+### 5. 集成步骤
+
+1) 添加依赖
+
+```xml
+    <!-- 必须要添加的依赖为以下内容 -->
+<dependency>
+    <groupId>help.lixin.sharding.resource</groupId>
+    <artifactId>sharding-resource-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+<dependency>
+<groupId>com.google.guava</groupId>
+<artifactId>guava</artifactId>
+<version>30.1.1-jre</version>
+</dependency>
+
+        <!-- 以下内容,根据你自己的情况添加 -->
+<dependency>
+<groupId>com.alibaba</groupId>
+<artifactId>druid</artifactId>
+<version>1.1.22</version>
+</dependency>
+<dependency>
+<groupId>com.zaxxer</groupId>
+<artifactId>HikariCP</artifactId>
+<version>3.2.0</version>
+</dependency>
+
+<dependency>
+<groupId>mysql</groupId>
+<artifactId>mysql-connector-java</artifactId>
+</dependency>
 ```
+
 2) 配置开启分片功能
+
 ```yaml
 spring:
   sharding:
     resource:
       enabled: true
 ```
+
 3) 配置数据源
+
 > 默认情况下定位数据源的唯一定位是通过:${instanceName}/${resourceName}/${resourceType},你可以根据你自己的需求,进行组合.
 > 在这里主要配置了3个数据源.
+
 ```yaml
 spring:
   main:
@@ -121,4 +148,5 @@ spring:
             initialSize: 2
             maxIdle: 100
 ```
-### 5. 总结
+
+### 6. 总结

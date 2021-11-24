@@ -6,6 +6,7 @@
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/customizer/impl/DruidDataSourceCustomizer.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/manager/IDataSourceController.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/core/VirtualDataSource.java
+/Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/core/ConnectionProxy.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/keygenerate/impl/ContextKeyGenerateStrategy.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/customizer/IDataSourceCustomizer.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/manager/store/IDataSourceStore.java
@@ -13,6 +14,7 @@
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/manager/impl/DefaultDataSourceController.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/keygenerate/impl/DatabaseResourceKeyGenerateStrategy.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/manager/IDataSourceInitController.java
+/Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/sql/JDBCSQLOverrideService.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/util/DataSourceUtil.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/keygenerate/IKeyGenerateStrategy.java
 /Users/lixin/GitRepository/sharding-resource-parent/sharding-resource-database-parent/sharding-resource-database-core/src/main/java/help/lixin/datasource/manager/impl/DataSourceInitController.java
