@@ -12,11 +12,11 @@ import java.util.concurrent.Executor;
 /**
  * 对javax.sql.Connection进行代理,拦截SQL,进行处理.
  */
-public class ProxyConnection implements Connection {
+public class RewriteSQLConnection implements Connection {
 
     private Connection targetConnection;
 
-    public ProxyConnection(Connection targetConnection) {
+    public RewriteSQLConnection(Connection targetConnection) {
         this.targetConnection = targetConnection;
     }
 

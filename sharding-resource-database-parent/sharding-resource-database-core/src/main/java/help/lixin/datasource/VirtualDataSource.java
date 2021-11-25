@@ -79,14 +79,8 @@ public class VirtualDataSource implements DataSource {
             // 真实连接
             Optional<Connection> targetConnection = virtuaDataSourceDelegator.getConnection(dbCtx);
             if (targetConnection.isPresent()) {
-                // 如果指定了SQL重写的切入是jdbc的话,通过jdbc进行处理
-                if (shardingResourceProperties.getRewriteMode().equalsIgnoreCase(RewriteSQLMode.JDBC.name())) {
-                    ProxyConnection proxyConnection = new ProxyConnection(targetConnection.get());
-                    return proxyConnection;
-                } else {
-                    Connection connection = targetConnection.get();
-                    return connection;
-                }
+                RewriteSQLConnection rewriteSQLConnection = new RewriteSQLConnection(targetConnection.get());
+                return rewriteSQLConnection;
             } else {
                 logger.error("从DBResourceContextInfo[{}]上下文获取信息失败.", dbCtx);
                 throw new SQLException("请求获取连接失败,不存在DBResourceContextInfo对象.");

@@ -1,6 +1,5 @@
 package help.lixin.datasource.properties;
 
-import help.lixin.datasource.RewriteSQLMode;
 import help.lixin.datasource.model.DatabaseResource;
 import help.lixin.resource.constants.Constants;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +13,6 @@ public class ShardingResourceProperties {
     // 所属环境(比如:XXX公司),多个之间用逗号分隔
     private String env;
     private List<String> envs = new ArrayList(0);
-    // 重写SQL的切入点期望在哪?为什么要对MyBatis进行扩展?因为重写后的SQL通过mybatis日志是看不出来的,主要是不要让控制台的SQL误导了开发人员.
-    private String rewriteMode = RewriteSQLMode.MYBATIS.name();
     // 微服务名称
     @Value("${spring.application.name:}")
     private String microServiceName;
@@ -28,14 +25,6 @@ public class ShardingResourceProperties {
 
     public List<String> getEnvs() {
         return envs;
-    }
-
-    public void setRewriteMode(String rewriteMode) {
-        this.rewriteMode = rewriteMode;
-    }
-
-    public String getRewriteMode() {
-        return rewriteMode;
     }
 
     public void setEnv(String env) {

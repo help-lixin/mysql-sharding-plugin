@@ -18,19 +18,32 @@ public class DefaultSQLRewriteService implements ISQLRewriteService {
     private Logger logger = LoggerFactory.getLogger(DefaultSQLRewriteService.class);
 
     private static final String DB_TYPE = "mysql";
+    // 标记是否曾经重写过SQL语句,防止多次重写SQL语句
+    private static final String MARK_REWRITE_KEY = "_rewrite_sql";
+    private static final String MARK_REWRITE_VALUE = "true";
 
     @Override
     public String rewrite(String sql, Object... args) {
-        List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DB_TYPE);
-        MySqlASTVisitorAdapter visitor = new TableRewriteMySqlASTVisitorAdapter();
-        for (SQLStatement sqlStatement : sqlStatements) {
-            sqlStatement.accept(visitor);
+        ResourceContext ctx = ResourceContextHolder.get();
+        if (null != ctx) {
+            String markRewrite = ctx.getProperties().getOrDefault(MARK_REWRITE_KEY, "false");
+            // 使得这个方法只执行一次.
+            if (markRewrite.equalsIgnoreCase("false")) {
+                List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DB_TYPE);
+                MySqlASTVisitorAdapter visitor = new TableRewriteMySqlASTVisitorAdapter();
+                for (SQLStatement sqlStatement : sqlStatements) {
+                    sqlStatement.accept(visitor);
+                }
+                String newSQL = SQLUtils.toSQLString(sqlStatements, DB_TYPE);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("override sql before:[{}] , after:[{}]", sql, newSQL);
+                }
+                // 标记曾经重写过SQL语句,下次就不会再进入该业务逻辑了
+                ctx.getProperties().put(MARK_REWRITE_KEY, MARK_REWRITE_VALUE);
+                return newSQL;
+            }
         }
-        String newSQL = SQLUtils.toSQLString(sqlStatements, DB_TYPE);
-        if (logger.isDebugEnabled()) {
-            logger.debug("override sql before:[{}] , after:[{}]", sql, newSQL);
-        }
-        return newSQL;
+        return sql;
     }
 }
 

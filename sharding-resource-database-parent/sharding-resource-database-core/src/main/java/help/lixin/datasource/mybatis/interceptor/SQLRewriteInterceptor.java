@@ -47,7 +47,6 @@ public class SQLRewriteInterceptor implements Interceptor {
             String overrideBeforeSql = oldBoundSql.getSql();
             // 重写SQL语句之后
             String oveerrideAfterSql = overrideBeforeSql;
-
             boolean present = getSQLRewriteService().isPresent();
             if (present) {
                 ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();

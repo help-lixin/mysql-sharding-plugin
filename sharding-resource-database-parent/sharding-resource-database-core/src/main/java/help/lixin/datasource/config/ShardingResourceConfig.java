@@ -4,7 +4,6 @@ import help.lixin.datasource.aop.BindResourceContextAspect;
 import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
 import help.lixin.datasource.VirtualDataSource;
 import help.lixin.datasource.core.impl.VirtuaDataSourceDelegator;
-import help.lixin.datasource.mybatis.condition.MyBatisConfigurationCustomizerCondition;
 import help.lixin.datasource.service.init.customizer.IDataSourceCustomizer;
 import help.lixin.datasource.service.init.customizer.impl.DruidDataSourceCustomizer;
 import help.lixin.datasource.service.init.customizer.impl.HikariCPDataSourceCustomizer;
@@ -154,7 +153,7 @@ public class ShardingResourceConfig {
         return new DataSourceInitService(dataSourceMetaService, databaseResourceKeyGenerateService, dataSourceStoreService, dataSourceCustomizers.getIfAvailable());
     }
 
-    
+
     @Bean
     @ConditionalOnMissingBean(name = "defaultRuleService")
     public IRuleService ruleService(
@@ -256,7 +255,6 @@ public class ShardingResourceConfig {
     }
 
     @Bean
-    @Conditional(MyBatisConfigurationCustomizerCondition.class)
     public MyBatisConfigurationCustomizer myBatisConfigurationCustomizer() {
         return new MyBatisConfigurationCustomizer();
     }

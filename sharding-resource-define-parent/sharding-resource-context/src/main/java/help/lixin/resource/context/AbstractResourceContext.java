@@ -45,7 +45,9 @@ public abstract class AbstractResourceContext implements ResourceContext {
         }
 
         public Build properties(Map<String, String> properties) {
-            this.properties = properties;
+            if (null != properties) {
+                this.properties = properties;
+            }
             return this;
         }
 
@@ -89,7 +91,9 @@ public abstract class AbstractResourceContext implements ResourceContext {
 
     @Override
     public void setProperties(Map<String, String> properties) {
-        this.properties = properties;
+        if (null != properties) {
+            this.properties = properties;
+        }
     }
 
     @Override
