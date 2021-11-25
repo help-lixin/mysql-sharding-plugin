@@ -1,4 +1,4 @@
-package help.lixin.datasource.sql.override;
+package help.lixin.datasource.sql.rewrite;
 
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
@@ -7,22 +7,22 @@ import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlASTVisitorAdapter;
 import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.context.ResourceContext;
-import help.lixin.resource.sql.ISQLOverrideService;
+import help.lixin.resource.sql.ISQLRewriteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class DefaultSQLOverrideService implements ISQLOverrideService {
+public class DefaultSQLRewriteService implements ISQLRewriteService {
 
-    private Logger logger = LoggerFactory.getLogger(DefaultSQLOverrideService.class);
+    private Logger logger = LoggerFactory.getLogger(DefaultSQLRewriteService.class);
 
     private static final String DB_TYPE = "mysql";
 
     @Override
-    public String override(String sql, Object... args) {
+    public String rewrite(String sql, Object... args) {
         List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DB_TYPE);
-        MySqlASTVisitorAdapter visitor = new TableOverrideMySqlASTVisitorAdapter();
+        MySqlASTVisitorAdapter visitor = new TableRewriteMySqlASTVisitorAdapter();
         for (SQLStatement sqlStatement : sqlStatements) {
             sqlStatement.accept(visitor);
         }
@@ -34,7 +34,7 @@ public class DefaultSQLOverrideService implements ISQLOverrideService {
     }
 }
 
-class TableOverrideMySqlASTVisitorAdapter extends MySqlASTVisitorAdapter {
+class TableRewriteMySqlASTVisitorAdapter extends MySqlASTVisitorAdapter {
     public boolean visit(SQLExprTableSource x) {
         ResourceContext tmp = ResourceContextHolder.get();
         if (null != tmp && tmp instanceof DBResourceContext

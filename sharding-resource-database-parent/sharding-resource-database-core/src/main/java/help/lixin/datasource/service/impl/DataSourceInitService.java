@@ -1,10 +1,10 @@
-package help.lixin.datasource.manager.impl;
+package help.lixin.datasource.service.impl;
 
 import help.lixin.datasource.WrapperDataSourceMeta;
-import help.lixin.datasource.customizer.IDataSourceCustomizer;
+import help.lixin.datasource.service.customizer.IDataSourceCustomizer;
 import help.lixin.datasource.keygen.IKeyGenerateService;
-import help.lixin.datasource.manager.IDataSourceInitService;
-import help.lixin.datasource.store.IDataSourceStoreService;
+import help.lixin.datasource.service.IDataSourceInitService;
+import help.lixin.datasource.service.store.IDataSourceStoreService;
 import help.lixin.datasource.meta.IDataSourceMetaService;
 import help.lixin.datasource.model.DatabaseResource;
 import help.lixin.datasource.util.DataSourceUtil;

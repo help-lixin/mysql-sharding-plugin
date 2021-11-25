@@ -1,4 +1,4 @@
-package help.lixin.datasource.store;
+package help.lixin.datasource.service.store;
 
 import help.lixin.datasource.WrapperDataSourceMeta;
 

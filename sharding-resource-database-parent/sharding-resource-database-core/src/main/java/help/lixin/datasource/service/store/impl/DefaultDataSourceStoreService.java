@@ -1,9 +1,9 @@
-package help.lixin.datasource.store.impl;
+package help.lixin.datasource.service.store.impl;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import help.lixin.datasource.WrapperDataSourceMeta;
-import help.lixin.datasource.store.IDataSourceStoreService;
+import help.lixin.datasource.service.store.IDataSourceStoreService;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package help.lixin.datasource.core.impl;
 
 import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
-import help.lixin.datasource.manager.IBorrowDataSourceService;
+import help.lixin.datasource.service.IBorrowDataSourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

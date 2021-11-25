@@ -1,6 +1,6 @@
 package help.lixin.datasource.mybatis.interceptor;
 
-import help.lixin.resource.sql.ISQLOverrideService;
+import help.lixin.resource.sql.ISQLRewriteService;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -24,7 +24,7 @@ import java.util.*;
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
 })
-public class SQLOverrideInterceptor implements Interceptor {
+public class SQLRewriteInterceptor implements Interceptor {
 
     private final Set<String> supportMethods = new HashSet<>();
 
@@ -48,10 +48,10 @@ public class SQLOverrideInterceptor implements Interceptor {
             // 重写SQL语句之后
             String oveerrideAfterSql = overrideBeforeSql;
 
-            boolean present = overrideService().isPresent();
+            boolean present = getSQLRewriteService().isPresent();
             if (present) {
-                ISQLOverrideService overrideService = overrideService().get();
-                oveerrideAfterSql = overrideService.override(overrideBeforeSql, null);
+                ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+                oveerrideAfterSql = sqlRewriteService.rewrite(overrideBeforeSql, null);
             }
 
             BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), oveerrideAfterSql, oldBoundSql.getParameterMappings(), oldBoundSql.getParameterObject());
@@ -76,8 +76,8 @@ public class SQLOverrideInterceptor implements Interceptor {
         return invocation.proceed();
     }
 
-    protected Optional<ISQLOverrideService> overrideService() {
-        Iterator<ISQLOverrideService> iterator = ServiceLoader.load(ISQLOverrideService.class).iterator();
+    protected Optional<ISQLRewriteService> getSQLRewriteService() {
+        Iterator<ISQLRewriteService> iterator = ServiceLoader.load(ISQLRewriteService.class).iterator();
         if (iterator.hasNext()) {
             return Optional.of(iterator.next());
         }

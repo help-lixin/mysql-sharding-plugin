@@ -1,9 +1,6 @@
 package help.lixin.resource.sql;
 
-
-import java.sql.Connection;
-
-public interface ISQLOverrideService {
+public interface ISQLRewriteService {
 
     /**
      * 对sql语句进行处理
@@ -11,6 +8,6 @@ public interface ISQLOverrideService {
      * @param sql
      * @return
      */
-    String override(String sql, Object... args);
+    String rewrite(String sql, Object... args);
 
 }

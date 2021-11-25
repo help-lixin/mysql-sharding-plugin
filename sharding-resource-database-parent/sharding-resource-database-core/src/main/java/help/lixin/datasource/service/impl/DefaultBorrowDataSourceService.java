@@ -1,10 +1,10 @@
-package help.lixin.datasource.manager.impl;
+package help.lixin.datasource.service.impl;
 
 import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.datasource.WrapperDataSourceMeta;
 import help.lixin.datasource.keygen.IKeyGenerateService;
-import help.lixin.datasource.manager.IBorrowDataSourceService;
-import help.lixin.datasource.store.IDataSourceStoreService;
+import help.lixin.datasource.service.IBorrowDataSourceService;
+import help.lixin.datasource.service.store.IDataSourceStoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

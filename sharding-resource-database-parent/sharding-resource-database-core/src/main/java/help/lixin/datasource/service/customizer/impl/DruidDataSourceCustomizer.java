@@ -1,7 +1,7 @@
-package help.lixin.datasource.customizer.impl;
+package help.lixin.datasource.service.customizer.impl;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import help.lixin.datasource.customizer.IDataSourceCustomizer;
+import help.lixin.datasource.service.customizer.IDataSourceCustomizer;
 import help.lixin.datasource.model.DatabaseResource;
 
 import javax.sql.DataSource;

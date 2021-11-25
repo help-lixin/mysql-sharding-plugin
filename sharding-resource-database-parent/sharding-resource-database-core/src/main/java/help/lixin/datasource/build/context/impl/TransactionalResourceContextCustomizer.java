@@ -1,4 +1,4 @@
-package help.lixin.datasource.build.context.customizer;
+package help.lixin.datasource.build.context.impl;
 
 import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.resource.context.AbstractResourceContext;
@@ -18,7 +18,7 @@ public class TransactionalResourceContextCustomizer implements IResourceContextC
         if (!(ctxBuild instanceof DBResourceContext.Build)) {
             return;
         }
-        
+
         // 强制转换为:DBResourceContext.Build
         DBResourceContext.Build build = (DBResourceContext.Build) ctxBuild;
         boolean aopProxy = AopUtils.isAopProxy(invocation.getInstance());

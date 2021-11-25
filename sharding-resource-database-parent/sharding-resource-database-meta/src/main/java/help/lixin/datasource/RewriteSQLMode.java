@@ -1,5 +1,5 @@
 package help.lixin.datasource;
 
-public enum OverrideSQLMode {
+public enum RewriteSQLMode {
     MYBATIS, JDBC
 }

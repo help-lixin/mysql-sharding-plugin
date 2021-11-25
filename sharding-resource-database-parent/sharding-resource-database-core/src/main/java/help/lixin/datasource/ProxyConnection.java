@@ -1,6 +1,6 @@
 package help.lixin.datasource;
 
-import help.lixin.resource.sql.ISQLOverrideService;
+import help.lixin.resource.sql.ISQLRewriteService;
 
 import java.sql.*;
 import java.util.Map;
@@ -20,8 +20,8 @@ public class ProxyConnection implements Connection {
         this.targetConnection = targetConnection;
     }
 
-    protected Optional<ISQLOverrideService> getSQLOverrideService() {
-        ServiceLoader<ISQLOverrideService> load = ServiceLoader.load(ISQLOverrideService.class);
+    protected Optional<ISQLRewriteService> getSQLRewriteService() {
+        ServiceLoader<ISQLRewriteService> load = ServiceLoader.load(ISQLRewriteService.class);
         if (load.iterator().hasNext()) {
             return Optional.of(load.iterator().next());
         }
@@ -36,27 +36,27 @@ public class ProxyConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareStatement(sql);
     }
 
     @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareCall(sql);
     }
 
     @Override
     public String nativeSQL(String sql) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.nativeSQL(sql);
     }
@@ -143,18 +143,18 @@ public class ProxyConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareStatement(sql, resultSetType, resultSetConcurrency);
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlOverrideService = getSQLRewriteService().get();
+            sql = sqlOverrideService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareCall(sql, resultSetType, resultSetConcurrency);
     }
@@ -206,45 +206,45 @@ public class ProxyConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareStatement(sql, autoGeneratedKeys);
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareStatement(sql, columnIndexes);
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-        if (getSQLOverrideService().isPresent()) {
-            ISQLOverrideService sqlOverrideService = getSQLOverrideService().get();
-            sql = sqlOverrideService.override(sql, targetConnection);
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
         }
         return targetConnection.prepareStatement(sql, columnNames);
     }
