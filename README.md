@@ -175,7 +175,6 @@ SELECT * FROM order t WHERE t.order_id IN (?, ?)
 
 6) MyBatis控制台SQL
 ```
-# 改写后的SQL语句 
+# 改写后的SQL语句(增加了库前缀和表前缀) 
 SELECT * FROM order_db_1.tb1_order t WHERE t.order_id IN (?, ?)
-565585450073325568(Long), 565585450987683840(Long)
 ```
