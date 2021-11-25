@@ -60,7 +60,7 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
 1) 添加依赖
 
 ```xml
-    <!-- 必须要添加的依赖为以下内容 -->
+<!-- 必须要添加的依赖为以下内容 -->
 <dependency>
     <groupId>help.lixin.sharding.resource</groupId>
     <artifactId>sharding-resource-spring-boot-starter</artifactId>
@@ -147,4 +147,35 @@ spring:
             initialSize: 2
             maxIdle: 100
 ```
-### 6. 总结
+4) 实现上下文绑定(在请求时,回调该函数一次)
+```
+@Bean
+ public IResourceContextCustomizer businessResourceContextCustomizer() {
+     return (invocation, ctxBuild) -> {
+         if (!(ctxBuild instanceof DBResourceContext.Build)) {
+             return;
+         }
+
+         // TODO lixin
+         // 模拟换数据源的信息.
+         DBResourceContext.Build ctx = (DBResourceContext.Build) ctxBuild;
+         ctx.instanceName("127.0.0.1:3306")
+                 .dataSourceName("user-service")
+                 .database("order_db_1")
+                 .tablePrefix("tb1_");
+     };
+ }
+```
+
+5) MyBatis原始SQL语句
+```
+# 原始SQL语句
+SELECT * FROM order t WHERE t.order_id IN (?, ?)
+```
+
+6) MyBatis控制台SQL
+```
+# 改写后的SQL语句
+SELECT * FROM order_db_1.tb1_order t WHERE t.order_id IN (?, ?)
+565585450073325568(Long), 565585450987683840(Long)
+```
