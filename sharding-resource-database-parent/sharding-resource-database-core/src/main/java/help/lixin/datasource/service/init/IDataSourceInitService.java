@@ -1,4 +1,4 @@
-package help.lixin.datasource.service;
+package help.lixin.datasource.service.init;
 
 public interface IDataSourceInitService {
     /**

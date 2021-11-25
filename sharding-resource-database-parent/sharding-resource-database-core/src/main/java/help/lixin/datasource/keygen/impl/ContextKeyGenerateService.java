@@ -25,7 +25,7 @@ public class ContextKeyGenerateService extends AbstractKeyGenerateService implem
             boolean readOnly = ctx.isReadOnly();
             // 模式
             ResourceMode mode = readOnly ? ResourceMode.R : ResourceMode.RW;
-            String format = generate0(instanceName, dataSourceName, mode.name());
+            String format = generate0(dataSourceName);
             return format;
         }
     }

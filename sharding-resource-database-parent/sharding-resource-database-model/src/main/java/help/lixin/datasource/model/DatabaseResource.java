@@ -3,7 +3,9 @@ package help.lixin.datasource.model;
 import help.lixin.resource.ResourceMode;
 import help.lixin.resource.model.Resource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +26,8 @@ public class DatabaseResource implements Resource {
     private String username;
     private String password;
     private Map<String, Object> properties = new HashMap<>();
+    // 多个slave
+    private List<DatabaseResource> slaves = new ArrayList<>(0);
 
     @Override
     public void setResourceName(String resourceName) {
@@ -97,6 +101,16 @@ public class DatabaseResource implements Resource {
 
     public String getType() {
         return type;
+    }
+
+    public void setSlaves(List<DatabaseResource> slaves) {
+        if (null != slaves) {
+            this.slaves = slaves;
+        }
+    }
+
+    public List<DatabaseResource> getSlaves() {
+        return slaves;
     }
 
     @Override

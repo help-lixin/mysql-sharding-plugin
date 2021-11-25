@@ -5,17 +5,19 @@ import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
 import help.lixin.datasource.VirtualDataSource;
 import help.lixin.datasource.core.impl.VirtuaDataSourceDelegator;
 import help.lixin.datasource.mybatis.condition.MyBatisConfigurationCustomizerCondition;
-import help.lixin.datasource.service.customizer.IDataSourceCustomizer;
-import help.lixin.datasource.service.customizer.impl.DruidDataSourceCustomizer;
-import help.lixin.datasource.service.customizer.impl.HikariCPDataSourceCustomizer;
+import help.lixin.datasource.service.init.customizer.IDataSourceCustomizer;
+import help.lixin.datasource.service.init.customizer.impl.DruidDataSourceCustomizer;
+import help.lixin.datasource.service.init.customizer.impl.HikariCPDataSourceCustomizer;
 import help.lixin.datasource.keygen.IKeyGenerateService;
 import help.lixin.datasource.keygen.impl.ContextKeyGenerateService;
 import help.lixin.datasource.keygen.impl.DatabaseResourceKeyGenerateService;
-import help.lixin.datasource.service.IBorrowDataSourceService;
-import help.lixin.datasource.service.IDataSourceInitService;
-import help.lixin.datasource.service.impl.DataSourceInitService;
-import help.lixin.datasource.service.impl.DefaultBorrowDataSourceService;
+import help.lixin.datasource.service.loadbalancer.ILoadBalancerDataSourceService;
+import help.lixin.datasource.service.init.IDataSourceInitService;
+import help.lixin.datasource.service.init.impl.DataSourceInitService;
+import help.lixin.datasource.service.loadbalancer.IRuleService;
+import help.lixin.datasource.service.loadbalancer.impl.DefaultLoadBalancerDataSourceService;
 import help.lixin.datasource.mybatis.MyBatisConfigurationCustomizer;
+import help.lixin.datasource.service.loadbalancer.impl.DefaultRuleService;
 import help.lixin.datasource.service.store.impl.DefaultDataSourceStoreService;
 import help.lixin.datasource.service.store.IDataSourceStoreService;
 import help.lixin.datasource.meta.IDataSourceMetaService;
@@ -152,21 +154,26 @@ public class ShardingResourceConfig {
         return new DataSourceInitService(dataSourceMetaService, databaseResourceKeyGenerateService, dataSourceStoreService, dataSourceCustomizers.getIfAvailable());
     }
 
-    /**
-     * 数据源的获取控制
-     *
-     * @param contextKeyGenerateService
-     * @param dataSourceStore
-     * @return
-     */
+    
     @Bean
-    @ConditionalOnMissingBean
-    public IBorrowDataSourceService borrowDataSourceService(
+    @ConditionalOnMissingBean(name = "defaultRuleService")
+    public IRuleService ruleService(
             @Autowired
             @Qualifier("contextKeyGenerateService")
                     IKeyGenerateService contextKeyGenerateService,
             IDataSourceStoreService dataSourceStore) {
-        return new DefaultBorrowDataSourceService(contextKeyGenerateService, dataSourceStore);
+        return new DefaultRuleService(contextKeyGenerateService, dataSourceStore);
+    }
+
+    /**
+     * 数据源负载均衡
+     *
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public ILoadBalancerDataSourceService loadBalancerDataSourceService(IRuleService ruleService) {
+        return new DefaultLoadBalancerDataSourceService(ruleService);
     }
 
     /**
@@ -176,8 +183,8 @@ public class ShardingResourceConfig {
      */
     @Bean
     @ConditionalOnMissingBean(name = "virtuaDataSourceDelegator")
-    public IVirtuaDataSourceDelegator virtuaDataSourceDelegator(IBorrowDataSourceService borrowDataSourceService) {
-        return new VirtuaDataSourceDelegator(borrowDataSourceService);
+    public IVirtuaDataSourceDelegator virtuaDataSourceDelegator(ILoadBalancerDataSourceService loadBalancerDataSourceService) {
+        return new VirtuaDataSourceDelegator(loadBalancerDataSourceService);
     }
 
     /**

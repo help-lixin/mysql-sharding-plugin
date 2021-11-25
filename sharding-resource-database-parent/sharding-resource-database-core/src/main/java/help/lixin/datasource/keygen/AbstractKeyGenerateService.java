@@ -2,7 +2,7 @@ package help.lixin.datasource.keygen;
 
 public abstract class AbstractKeyGenerateService implements IKeyGenerateService {
 
-    protected static final String DEFAULT_FORMAT = "%s/%s/%s";
+    protected static final String DEFAULT_FORMAT = "%s";
 
     private String format;
 

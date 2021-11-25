@@ -1,4 +1,4 @@
-package help.lixin.datasource.service.customizer;
+package help.lixin.datasource.service.init.customizer;
 
 import help.lixin.datasource.model.DatabaseResource;
 

@@ -1,7 +1,7 @@
-package help.lixin.datasource.service.customizer.impl;
+package help.lixin.datasource.service.init.customizer.impl;
 
 import com.zaxxer.hikari.HikariDataSource;
-import help.lixin.datasource.service.customizer.IDataSourceCustomizer;
+import help.lixin.datasource.service.init.customizer.IDataSourceCustomizer;
 import help.lixin.datasource.model.DatabaseResource;
 
 import javax.sql.DataSource;
