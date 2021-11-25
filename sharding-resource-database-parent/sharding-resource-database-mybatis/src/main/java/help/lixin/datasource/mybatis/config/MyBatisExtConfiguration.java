@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass({SqlSessionFactory.class})
 public class MyBatisExtConfiguration {
 
+
+
     @Bean
     public ConfigurationCustomizer languageDriverCustomizer() {
         return new LanguageDriverCustomizer();

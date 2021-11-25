@@ -11,6 +11,6 @@ public interface ISQLOverrideService {
      * @param sql
      * @return
      */
-    String override(Connection connection, String sql);
+    String override(String sql, Object... args);
 
 }

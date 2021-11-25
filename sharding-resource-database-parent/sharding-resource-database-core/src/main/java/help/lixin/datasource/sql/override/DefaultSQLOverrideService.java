@@ -11,17 +11,16 @@ import help.lixin.resource.sql.ISQLOverrideService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
 import java.util.List;
 
-public class JDBCSQLOverrideService implements ISQLOverrideService {
+public class DefaultSQLOverrideService implements ISQLOverrideService {
 
-    private Logger logger = LoggerFactory.getLogger(JDBCSQLOverrideService.class);
+    private Logger logger = LoggerFactory.getLogger(DefaultSQLOverrideService.class);
 
     private static final String DB_TYPE = "mysql";
 
     @Override
-    public String override(Connection connection, String sql) {
+    public String override(String sql, Object... args) {
         List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DB_TYPE);
         MySqlASTVisitorAdapter visitor = new TableOverrideMySqlASTVisitorAdapter();
         for (SQLStatement sqlStatement : sqlStatements) {

@@ -14,6 +14,7 @@ import help.lixin.datasource.manager.IBorrowDataSourceService;
 import help.lixin.datasource.manager.IDataSourceInitService;
 import help.lixin.datasource.manager.impl.DataSourceInitService;
 import help.lixin.datasource.manager.impl.DefaultBorrowDataSourceService;
+import help.lixin.datasource.mybatis.customizer.MyBatisConfigurationCustomizer;
 import help.lixin.datasource.store.impl.DefaultDataSourceStoreService;
 import help.lixin.datasource.store.IDataSourceStoreService;
 import help.lixin.datasource.meta.IDataSourceMetaService;
@@ -22,6 +23,7 @@ import help.lixin.datasource.meta.impl.EnvironmentDataSourceMetaService;
 import help.lixin.datasource.properties.ShardingResourceProperties;
 import help.lixin.datasource.build.context.DefaultBuildResourceContextService;
 import help.lixin.datasource.build.context.customizer.TransactionalResourceContextCustomizer;
+import help.lixin.resource.constants.Constants;
 import help.lixin.resource.event.Event;
 import help.lixin.resource.listener.IEventListener;
 import help.lixin.resource.publisher.DefaultEventPublisher;
@@ -34,9 +36,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -188,8 +188,8 @@ public class ShardingResourceConfig {
      */
     @Bean
     @ConditionalOnMissingBean(name = "dataSource", value = {DataSource.class})
-    public DataSource dataSource(IVirtuaDataSourceDelegator virtuaDataSourceDelegator) {
-        return new VirtualDataSource(virtuaDataSourceDelegator);
+    public DataSource dataSource(IVirtuaDataSourceDelegator virtuaDataSourceDelegator, ShardingResourceProperties shardingResourceProperties) {
+        return new VirtualDataSource(virtuaDataSourceDelegator, shardingResourceProperties);
     }
 
     @Bean
@@ -208,6 +208,7 @@ public class ShardingResourceConfig {
     public IResourceContextCustomizer transactionalResourceContextCustomizer() {
         return new TransactionalResourceContextCustomizer();
     }
+
 
     /**
      * 绑定上下文切面
@@ -245,6 +246,12 @@ public class ShardingResourceConfig {
             }
         };
         return listener;
+    }
+
+    @Bean
+    @Conditional(MyBatisConfigurationCustomizerCondition.class)
+    public MyBatisConfigurationCustomizer myBatisConfigurationCustomizer() {
+        return new MyBatisConfigurationCustomizer();
     }
 
     /**
