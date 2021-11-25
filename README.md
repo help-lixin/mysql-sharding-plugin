@@ -147,7 +147,7 @@ spring:
             initialSize: 2
             maxIdle: 100
 ```
-4) 实现上下文绑定(在请求时,回调该函数一次)
+4) 上下文绑定回调函数,自行配置数据源信息.
 ```
 @Bean
  public IResourceContextCustomizer businessResourceContextCustomizer() {
