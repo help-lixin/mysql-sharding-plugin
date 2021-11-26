@@ -30,7 +30,7 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
 .
 ├── LICENSE
 ├── README.md
-├── docs              # 文档介绍
+├── docs              # 详细设计文档介绍
 │   └── imgs
 ├── pom.xml
 ├── sharding-resource-database-parent      # 资源分片,针对数据库的实现
