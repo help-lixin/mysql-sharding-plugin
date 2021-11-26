@@ -1,4 +1,9 @@
 
+CREATE DATABASE order_db_1;
+
+USE order_db_1;
+
+
 DROP TABLE IF EXISTS `tb1_order`;
 CREATE TABLE `tb1_order` (
   `order_id` bigint(20) NOT NULL COMMENT '订单id',
