@@ -46,14 +46,14 @@ public class SQLRewriteInterceptor implements Interceptor {
             // 重写SQL语句之前
             String overrideBeforeSql = oldBoundSql.getSql();
             // 重写SQL语句之后
-            String oveerrideAfterSql = overrideBeforeSql;
+            String rewriteAfterSql = overrideBeforeSql;
             boolean present = getSQLRewriteService().isPresent();
             if (present) {
                 ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-                oveerrideAfterSql = sqlRewriteService.rewrite(overrideBeforeSql, null);
+                rewriteAfterSql = sqlRewriteService.rewrite(rewriteAfterSql, null);
             }
 
-            BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), oveerrideAfterSql, oldBoundSql.getParameterMappings(), oldBoundSql.getParameterObject());
+            BoundSql newBoundSql = new BoundSql(ms.getConfiguration(), rewriteAfterSql, oldBoundSql.getParameterMappings(), oldBoundSql.getParameterObject());
             SqlSource newSqlSource = (parameterObject) -> {
                 return newBoundSql;
             };
