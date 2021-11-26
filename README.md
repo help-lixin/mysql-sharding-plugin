@@ -60,20 +60,19 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
 1) 添加依赖
 
 ```xml
-<!-- 必须要添加的依赖为以下内容 -->
+<!-- 数据分片引擎 -->
 <dependency>
     <groupId>help.lixin.sharding.resource</groupId>
     <artifactId>sharding-resource-spring-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>
+<!-- DataSource集合,并没有移交给Spring,而是统一放在Guava缓存里 -->
 <dependency>
    <groupId>com.google.guava</groupId>
    <artifactId>guava</artifactId>
    <version>30.1.1-jre</version>
 </dependency>
-
-
-<!-- druid是必须要的因为底层利用了它对SQL进行解析,并重写SQL语句. --> 
+<!-- 底层利用了Druid对SQL进行解析,并重写SQL语句. --> 
 <dependency>
    <groupId>com.alibaba</groupId>
    <artifactId>druid</artifactId>
@@ -81,6 +80,7 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
 </dependency>
 
 <!-- 以下内容,根据你自己的情况添加 -->
+<!-- HikariCP数据源 -->
 <dependency>
    <groupId>com.zaxxer</groupId>
    <artifactId>HikariCP</artifactId>
@@ -104,48 +104,43 @@ spring:
 
 3) 配置数据源
 
-> 默认情况下定位数据源的唯一定位是通过:${instanceName}/${resourceName}/${resourceMode},你可以根据你自己的需求,进行组合.
-> 在这里主要配置了3个数据源.
+> 默认情况下定位数据源的唯一定位是通过:resourceName,你可以根据实现:IKeyGenerateService接口,交给Spring即可变更数据的名称.
+> 在这里主要配置了3个数据源(一主两从). 
 
 ```yaml
 spring:
-  sharding:
-    resource:
-      enabled: true
-      databases:
-        - instanceName: 127.0.0.1:3306
-          resourceName: user-service
-          mode: rw
-          type: com.alibaba.druid.pool.DruidDataSource
-          driver: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
-          username: root
-          password: 123456
-          properties:
-            initialSize: 1
-            maxIdle: 100
-        - instanceName: 127.0.0.1:3306
-          resourceName: user-service
-          mode: r
-          type: com.alibaba.druid.pool.DruidDataSource
-          driver: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
-          username: root
-          password: 123456
-          properties:
-            initialSize: 1
-            maxIdle: 100
-        - instanceName: 127.0.0.1:3306
-          resourceName: user-service
-          mode: r
-          type: com.zaxxer.hikari.HikariDataSource
-          driver: com.mysql.jdbc.Driver
-          url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
-          username: root
-          password: 123456
-          properties:
-            initialSize: 2
-            maxIdle: 100
+   sharding:
+      resource:
+         enabled: true
+         databases:
+            - instanceName: 127.0.0.1:3306
+              resourceName: user-service
+              type: com.alibaba.druid.pool.DruidDataSource
+              driver: com.mysql.jdbc.Driver
+              url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
+              username: root
+              password: 123456
+              properties:
+                 initialSize: 1
+                 maxIdle: 100
+              slaves:
+                 - type: com.alibaba.druid.pool.DruidDataSource
+                   driver: com.mysql.jdbc.Driver
+                   url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
+                   username: root
+                   password: 123456
+                   properties:
+                      initialSize: 1
+                      maxIdle: 100
+                 - type: com.zaxxer.hikari.HikariDataSource
+                   driver: com.mysql.jdbc.Driver
+                   url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
+                   username: root
+                   password: 123456
+                   properties:
+                      initialSize: 2
+                      maxIdle: 100
+
 ```
 4) 上下文绑定回调函数,自行配置数据源信息.
 ```
@@ -155,9 +150,7 @@ spring:
          if (!(ctxBuild instanceof DBResourceContext.Build)) {
              return;
          }
-
-         // TODO lixin
-         // 模拟换数据源的信息.
+         // 模拟换数据源的信息(可以从用户上下文中获取,又或者远程API请求获取).
          DBResourceContext.Build ctx = (DBResourceContext.Build) ctxBuild;
          ctx.instanceName("127.0.0.1:3306")
                  .dataSourceName("user-service")
@@ -169,12 +162,14 @@ spring:
 
 5) MyBatis原始SQL语句
 ```
-# 原始SQL语句
+# 原始SQL语句(order为虚拟表)
 SELECT * FROM order t WHERE t.order_id IN (?, ?)
 ```
 
 6) MyBatis控制台SQL
 ```
-# 改写后的SQL语句(增加了库前缀和表前缀) 
+# 改写后的SQL语句(增加了库前缀和表前缀)
+#  order               为虚拟表
+# order_db_1.tb1_order 为真实表
 SELECT * FROM order_db_1.tb1_order t WHERE t.order_id IN (?, ?)
 ```

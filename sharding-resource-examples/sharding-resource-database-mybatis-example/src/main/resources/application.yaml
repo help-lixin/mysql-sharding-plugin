@@ -14,7 +14,6 @@ spring:
   sharding:
     resource:
       enabled: true
-#      overrideMode: jdbc
       databases:
         - instanceName: 127.0.0.1:3306
           resourceName: user-service
