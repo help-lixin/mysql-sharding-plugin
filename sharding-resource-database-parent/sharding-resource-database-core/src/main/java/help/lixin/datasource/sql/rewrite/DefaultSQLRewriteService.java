@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlASTVisitorAdapter;
 import help.lixin.datasource.context.DBResourceContext;
+import help.lixin.resource.constants.Constants;
 import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.context.ResourceContext;
 import help.lixin.resource.sql.ISQLRewriteService;
@@ -14,19 +15,14 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class DefaultSQLRewriteService implements ISQLRewriteService {
-
     private Logger logger = LoggerFactory.getLogger(DefaultSQLRewriteService.class);
-
     private static final String DB_TYPE = "mysql";
-    // 标记是否曾经重写过SQL语句,防止多次重写SQL语句
-    private static final String MARK_REWRITE_KEY = "_rewrite_sql";
-    private static final String MARK_REWRITE_VALUE = "true";
 
     @Override
     public String rewrite(String sql, Object... args) {
         ResourceContext ctx = ResourceContextHolder.get();
         if (null != ctx) {
-            String markRewrite = ctx.getProperties().getOrDefault(MARK_REWRITE_KEY, "false");
+            String markRewrite = ctx.getProperties().getOrDefault(Constants.MARK_REWRITE_KEY, "false");
             // 使得这个方法只执行一次.
             if (markRewrite.equalsIgnoreCase("false")) {
                 List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DB_TYPE);
@@ -39,7 +35,7 @@ public class DefaultSQLRewriteService implements ISQLRewriteService {
                     logger.debug("override sql before:[{}] , after:[{}]", sql, newSQL);
                 }
                 // 标记曾经重写过SQL语句,下次就不会再进入该业务逻辑了
-                ctx.getProperties().put(MARK_REWRITE_KEY, MARK_REWRITE_VALUE);
+                ctx.getProperties().put(Constants.MARK_REWRITE_KEY, Constants.MARK_REWRITE_VALUE);
                 return newSQL;
             }
         }
@@ -55,8 +51,8 @@ class TableRewriteMySqlASTVisitorAdapter extends MySqlASTVisitorAdapter {
             DBResourceContext ctx = (DBResourceContext) tmp;
             String database = ctx.getDatabase();
             String tablePrefix = ctx.getTablePrefix();
-            // 上下文中包含这些内容时,才会进行处理
-            if (null != database && null != database) {
+            // 上下文中包含这些内容(database/tablePrefix)时,才会进行处理
+            if (null != database && null != tablePrefix) {
                 // 现有的表名称
                 String tableName = x.getName().getSimpleName();
                 String expr = new StringBuilder()

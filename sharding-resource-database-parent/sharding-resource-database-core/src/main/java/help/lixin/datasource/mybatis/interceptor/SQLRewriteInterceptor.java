@@ -18,7 +18,8 @@ import java.util.*;
 
 /**
  * 通过对JDBC(Connection)进行拦截,就能对SQL语句进行改写了(能适用:mybatis/hibernate/jdbcTemplate...),为什么还要对mybatis进行SQL改写?
- * 原因在于:我们的研发人员在开发环境或者生产环境,可能开启SQL日志,而针对Connection进行改写后,SQL语句的开启,对开发不够友好.
+ * 原因在于:我们的研发人员在开发环境或者生产环境,可能开启SQL日志,而针对Connection进行重写后,SQL语句的输出要对开发进行培训,对开发不够友好.
+ * 但是,为了防止一次请求N次重写SQL语句,做了控制,以防止多次重写SQL.
  */
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class}),
@@ -59,6 +60,7 @@ public class SQLRewriteInterceptor implements Interceptor {
             };
 
             MappedStatement newMs = copyFromMappedStatement(ms, newSqlSource);
+
             // 拷贝参数
             for (ParameterMapping mapping : oldBoundSql.getParameterMappings()) {
                 String prop = mapping.getProperty();
@@ -67,11 +69,13 @@ public class SQLRewriteInterceptor implements Interceptor {
                 }
             }
 
+            // 构建新的:Invocation
             final Object[] newArgs = args;
             newArgs[0] = newMs;
             Invocation newInvocation = new Invocation(target, method, newArgs);
             return newInvocation.proceed();
         }
+
         return invocation.proceed();
     }
 

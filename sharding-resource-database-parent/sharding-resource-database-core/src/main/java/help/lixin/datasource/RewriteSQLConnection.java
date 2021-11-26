@@ -1,5 +1,8 @@
 package help.lixin.datasource;
 
+import help.lixin.resource.constants.Constants;
+import help.lixin.resource.context.ResourceContext;
+import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.sql.ISQLRewriteService;
 
 import java.sql.*;
@@ -20,12 +23,48 @@ public class RewriteSQLConnection implements Connection {
         this.targetConnection = targetConnection;
     }
 
+    /**
+     * 通过SPI获得:ISQLRewriteService
+     *
+     * @return
+     */
     protected Optional<ISQLRewriteService> getSQLRewriteService() {
         ServiceLoader<ISQLRewriteService> load = ServiceLoader.load(ISQLRewriteService.class);
         if (load.iterator().hasNext()) {
             return Optional.of(load.iterator().next());
         }
         return Optional.empty();
+    }
+
+    /**
+     * 对SQL进行重写
+     *
+     * @param sql
+     * @return
+     */
+    protected String rewriteSql(String sql) {
+        if (getSQLRewriteService().isPresent()) {
+            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
+            sql = sqlRewriteService.rewrite(sql, targetConnection);
+            cleanMarkRewriteFlag();
+        }
+        return sql;
+    }
+
+
+    /**
+     * 清空重写标记
+     */
+    protected void cleanMarkRewriteFlag() {
+        // 清空线程上下文中的信息(假如一次请求,N次查询,这个开关的控制需要在每一次查询时,都置空一次.)
+        // 否则,后面的第二个查询开始就不会重SQL进行改写了.
+        ResourceContext ctx = ResourceContextHolder.get();
+        if (null != ctx) {
+            String markRewrite = ctx.getProperties().getOrDefault(Constants.MARK_REWRITE_KEY, null);
+            if (null != markRewrite) {
+                ctx.getProperties().remove(Constants.MARK_REWRITE_KEY);
+            }
+        }
     }
 
 
@@ -36,28 +75,19 @@ public class RewriteSQLConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareStatement(sql);
     }
 
     @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareCall(sql);
     }
 
     @Override
     public String nativeSQL(String sql) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.nativeSQL(sql);
     }
 
@@ -143,19 +173,13 @@ public class RewriteSQLConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareStatement(sql, resultSetType, resultSetConcurrency);
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlOverrideService = getSQLRewriteService().get();
-            sql = sqlOverrideService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareCall(sql, resultSetType, resultSetConcurrency);
     }
 
@@ -206,46 +230,31 @@ public class RewriteSQLConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareStatement(sql, autoGeneratedKeys);
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareStatement(sql, columnIndexes);
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-        if (getSQLRewriteService().isPresent()) {
-            ISQLRewriteService sqlRewriteService = getSQLRewriteService().get();
-            sql = sqlRewriteService.rewrite(sql, targetConnection);
-        }
+        sql = rewriteSql(sql);
         return targetConnection.prepareStatement(sql, columnNames);
     }
 
