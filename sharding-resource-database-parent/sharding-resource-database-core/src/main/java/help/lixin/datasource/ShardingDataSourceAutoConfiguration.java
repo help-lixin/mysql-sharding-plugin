@@ -1,6 +1,6 @@
-package help.lixin.resource;
+package help.lixin.datasource;
 
-import help.lixin.datasource.config.ShardingResourceConfig;
+import help.lixin.datasource.config.*;
 import help.lixin.resource.constants.Constants;
 import help.lixin.datasource.properties.ShardingResourceProperties;
 import org.slf4j.Logger;
@@ -12,21 +12,21 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(ShardingResourceProperties.class)
-@ImportAutoConfiguration({ShardingResourceConfig.class})
+@ImportAutoConfiguration({CommonConfig.class, DataSourceInitConfig.class, DataSourceLoadBalancerConfig.class, MyBatisConfiguration.class, ShardingResourceAopConfig.class})
 @ConditionalOnProperty(prefix = Constants.SHARDING_RESOURCE_KEY, name = Constants.ENABLED, havingValue = "true", matchIfMissing = false)
-public class ShardingResourceAutoConfiguration {
+public class ShardingDataSourceAutoConfiguration {
 
-    private Logger logger = LoggerFactory.getLogger(ShardingResourceAutoConfiguration.class);
+    private Logger logger = LoggerFactory.getLogger(ShardingDataSourceAutoConfiguration.class);
 
     private ShardingResourceProperties shardingResourceProperties;
 
-    public ShardingResourceAutoConfiguration(ShardingResourceProperties shardingResourceProperties) {
+    public ShardingDataSourceAutoConfiguration(ShardingResourceProperties shardingResourceProperties) {
         this.shardingResourceProperties = shardingResourceProperties;
     }
 
     {
         if (logger.isDebugEnabled()) {
-            logger.debug("enabled Module [{}] SUCCESS.", ShardingResourceAutoConfiguration.class.getSimpleName());
+            logger.debug("enabled Module [{}] SUCCESS.", ShardingDataSourceAutoConfiguration.class.getSimpleName());
         }
     }
 
