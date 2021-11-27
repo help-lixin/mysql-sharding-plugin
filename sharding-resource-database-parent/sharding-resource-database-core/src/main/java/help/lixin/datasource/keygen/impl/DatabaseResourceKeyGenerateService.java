@@ -15,7 +15,7 @@ public class DatabaseResourceKeyGenerateService extends AbstractKeyGenerateServi
             String instanceName = databaseResource.getInstanceName();
             String dataSourceName = databaseResource.getResourceName();
             ResourceMode mode = databaseResource.getMode();
-            String format = generate0(dataSourceName);
+            String format = generate0(instanceName);
             return format;
         }
     }
