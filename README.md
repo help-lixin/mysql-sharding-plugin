@@ -71,7 +71,7 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
     <artifactId>sharding-resource-spring-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>
-<!-- 产生的DataSource,并没有交给Spring,而是统一放在Guava缓存里 -->
+<!-- 创建的DataSource,并没有交给Spring,而是统一放在Guava缓存里 -->
 <dependency>
    <groupId>com.google.guava</groupId>
    <artifactId>guava</artifactId>
@@ -109,7 +109,7 @@ spring:
 
 3) 配置数据源
 
-> 默认情况下定位数据源的唯一定位是通过:instanceName,你可以实现:IKeyGenerateService接口,交给Spring即可变更数据的名称.
+> 默认情况下定位数据源的唯一定位是通过:instanceName(数据库实例的名称),你可以实现:IKeyGenerateService接口,交给Spring即可变更数据的名称.
 > 在这里主要配置了3个数据源(一主两从). 
 
 ```yaml
@@ -154,7 +154,8 @@ spring:
          if (!(ctxBuild instanceof DBResourceContext.Build)) {
              return;
          }
-         // 模拟换数据源的信息(可以从用户上下文中获取,又或者远程API请求获取).
+         // 设置这次请求对应的数据源信息.
+         // 可以从用户上下文(TheadLocal)中获取,又或者远程API请求获取(切记要缓存下).
          DBResourceContext.Build ctx = (DBResourceContext.Build) ctxBuild;
          ctx.instanceName("127.0.0.1:3306")
                  .database("order_db_1")
