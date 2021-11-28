@@ -5,12 +5,11 @@ import help.lixin.datasource.context.DBResourceContext;
 import help.lixin.datasource.keygen.IKeyGenerateService;
 import help.lixin.datasource.service.loadbalancer.IRuleService;
 import help.lixin.datasource.service.store.IDataSourceStoreService;
-import help.lixin.resource.ResourceMode;
+import help.lixin.resource.MasterSlave;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -48,11 +47,11 @@ public class DefaultRuleService implements IRuleService {
             boolean readOnly = ctx.isReadOnly();
             // 过滤出所有的master数据源
             List<WrapperDataSourceMeta> masters = dataSources.stream()
-                    .filter(ds -> ds.getMetaDatabaseResource().getMode().name().equalsIgnoreCase(ResourceMode.RW.name()))
+                    .filter(ds -> ds.getMetaDatabaseResource().getMode().name().equalsIgnoreCase(MasterSlave.MASTER.name()))
                     .collect(Collectors.toList());
             // 过滤出所有的slave数据源
             List<WrapperDataSourceMeta> slaves = dataSources.stream()
-                    .filter(ds -> ds.getMetaDatabaseResource().getMode().name().equalsIgnoreCase(ResourceMode.R.name()))
+                    .filter(ds -> ds.getMetaDatabaseResource().getMode().name().equalsIgnoreCase(MasterSlave.SLAVE.name()))
                     .collect(Collectors.toList());
             if (!readOnly) { // 读写模式
                 return Optional.of(masters.get(0));

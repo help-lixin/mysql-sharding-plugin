@@ -8,7 +8,7 @@ import help.lixin.datasource.service.store.IDataSourceStoreService;
 import help.lixin.datasource.meta.IDataSourceMetaService;
 import help.lixin.datasource.model.DatabaseResource;
 import help.lixin.datasource.util.DataSourceUtil;
-import help.lixin.resource.ResourceMode;
+import help.lixin.resource.MasterSlave;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,18 +44,18 @@ public class DataSourceInitService implements IDataSourceInitService {
     public synchronized void initDataSources() {
         List<DatabaseResource> metas = dataSourceMetaService.getMeta();
         if (null != metas) {
-            initItems(null, metas, ResourceMode.RW);
+            initItems(null, metas, MasterSlave.MASTER);
         }
     }
 
-    protected void initItems(String rsourceKey, List<DatabaseResource> metas, ResourceMode resourceMode) {
+    protected void initItems(String rsourceKey, List<DatabaseResource> metas, MasterSlave masterSlave) {
         for (DatabaseResource databaseResource : metas) {
-            initItem(rsourceKey, databaseResource, resourceMode);
+            initItem(rsourceKey, databaseResource, masterSlave);
         }
     }
 
-    protected void initItem(String rsourceKey, DatabaseResource databaseResource, ResourceMode resourceMode) {
-        databaseResource.setMode(resourceMode);
+    protected void initItem(String rsourceKey, DatabaseResource databaseResource, MasterSlave masterSlave) {
+        databaseResource.setMode(masterSlave);
         Optional<DataSource> ds = initDataSource(databaseResource);
         if (ds.isPresent()) {
             DataSource dataSource = ds.get();
@@ -68,7 +68,7 @@ public class DataSourceInitService implements IDataSourceInitService {
             // 2. 仅在写模式下检查.
             //    检查key下面的DataSource,不允许有多个master
             //    注意:不允许有多个master,但是允许有多个slave
-            if (resourceMode.name().equalsIgnoreCase(ResourceMode.RW.name())) {
+            if (masterSlave.name().equalsIgnoreCase(MasterSlave.MASTER.name())) {
                 checkDataSources(key);
             }
 
@@ -76,10 +76,10 @@ public class DataSourceInitService implements IDataSourceInitService {
             this.customizer(databaseResource, dataSource);
 
             if (logger.isInfoEnabled()) {
-                if (resourceMode.name().equalsIgnoreCase(ResourceMode.RW.name())) {
-                    logger.info("初始化MASTER数据源:[{}-{}]成功.", key, ResourceMode.RW.name());
+                if (masterSlave.name().equalsIgnoreCase(MasterSlave.MASTER.name())) {
+                    logger.info("初始化MASTER数据源:[{}-{}]成功.", key, MasterSlave.MASTER.name());
                 } else {
-                    logger.info("初始化SLAVE数据源:[{}-{}]成功.", key, ResourceMode.R.name());
+                    logger.info("初始化SLAVE数据源:[{}-{}]成功.", key, MasterSlave.SLAVE.name());
                 }
             }
 
@@ -90,7 +90,7 @@ public class DataSourceInitService implements IDataSourceInitService {
             // 5. 初始化所有的slave
             List<DatabaseResource> slaves = databaseResource.getSlaves();
             if (!slaves.isEmpty()) {
-                initItems(key, slaves, ResourceMode.R);
+                initItems(key, slaves, MasterSlave.SLAVE);
             }
         }
     }
@@ -99,7 +99,7 @@ public class DataSourceInitService implements IDataSourceInitService {
         List<WrapperDataSourceMeta> dataSources = dataSourceStore.getDataSources(key);
         if (null != dataSources) {
             long count = dataSources.stream()
-                    .filter(ds -> ds.getMetaDatabaseResource().getMode().name().equalsIgnoreCase(ResourceMode.RW.name()))
+                    .filter(ds -> ds.getMetaDatabaseResource().getMode().name().equalsIgnoreCase(MasterSlave.MASTER.name()))
                     .count();
             // master节点只允许初始化一个
             if (count > 1) {

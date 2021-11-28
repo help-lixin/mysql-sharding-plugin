@@ -1,6 +1,6 @@
 package help.lixin.datasource.model;
 
-import help.lixin.resource.ResourceMode;
+import help.lixin.resource.MasterSlave;
 import help.lixin.resource.model.Resource;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class DatabaseResource implements Resource {
     // 数据源名称(user-service)
     private String resourceName;
     // 资源属于:读写/读
-    private ResourceMode mode = ResourceMode.RW;
+    private MasterSlave mode = MasterSlave.MASTER;
     // 连接池类型(比如:com.alibaba.druid.pool.DruidDataSource)
     private String type;
     // 驱动程序信息(比如:com.mysql.jdbc.Driver)
@@ -47,11 +47,11 @@ public class DatabaseResource implements Resource {
         this.instanceName = instanceName;
     }
 
-    public void setMode(ResourceMode mode) {
+    public void setMode(MasterSlave mode) {
         this.mode = mode;
     }
 
-    public ResourceMode getMode() {
+    public MasterSlave getMode() {
         return mode;
     }
 

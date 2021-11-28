@@ -1,7 +1,21 @@
 # Compiled class file
 *.class
 
+# idea
 /.idea
+
+# eclipse
+.settings
+*.project
+*.prefs
+
+target
+target/maven-archiver
+target/maven-status/maven-compiler-plugi
+
+*.lst
+
+pom.properties
 
 # Log file
 *.log

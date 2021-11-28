@@ -3,7 +3,7 @@ package help.lixin.datasource.keygen.impl;
 import help.lixin.datasource.keygen.AbstractKeyGenerateService;
 import help.lixin.datasource.keygen.IKeyGenerateService;
 import help.lixin.datasource.model.DatabaseResource;
-import help.lixin.resource.ResourceMode;
+import help.lixin.resource.MasterSlave;
 
 public class DatabaseResourceKeyGenerateService extends AbstractKeyGenerateService implements IKeyGenerateService {
     @Override
@@ -14,7 +14,7 @@ public class DatabaseResourceKeyGenerateService extends AbstractKeyGenerateServi
             DatabaseResource databaseResource = (DatabaseResource) object;
             String instanceName = databaseResource.getInstanceName();
             String dataSourceName = databaseResource.getResourceName();
-            ResourceMode mode = databaseResource.getMode();
+            MasterSlave mode = databaseResource.getMode();
             String format = generate0(instanceName);
             return format;
         }

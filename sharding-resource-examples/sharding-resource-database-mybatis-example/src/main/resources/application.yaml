@@ -16,7 +16,6 @@ spring:
       enabled: true
       databases:
         - instanceName: 127.0.0.1:3306
-          resourceName: user-service
           type: com.alibaba.druid.pool.DruidDataSource
           driver: com.mysql.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/db?characterEncoding=utf-8&useSSL=false
