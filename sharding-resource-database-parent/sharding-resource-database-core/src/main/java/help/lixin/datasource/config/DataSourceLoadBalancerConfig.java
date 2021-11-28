@@ -1,13 +1,11 @@
 package help.lixin.datasource.config;
 
-import help.lixin.datasource.VirtualDataSource;
 import help.lixin.datasource.build.context.DefaultBuildResourceContextService;
 import help.lixin.datasource.build.context.impl.TransactionalResourceContextCustomizer;
 import help.lixin.datasource.core.IVirtuaDataSourceDelegator;
 import help.lixin.datasource.core.impl.VirtuaDataSourceDelegator;
 import help.lixin.datasource.keygen.IKeyGenerateService;
 import help.lixin.datasource.keygen.impl.ContextKeyGenerateService;
-import help.lixin.datasource.properties.ShardingResourceProperties;
 import help.lixin.datasource.service.loadbalancer.ILoadBalancerDataSourceService;
 import help.lixin.datasource.service.loadbalancer.IRuleService;
 import help.lixin.datasource.service.loadbalancer.impl.DefaultLoadBalancerDataSourceService;
@@ -22,7 +20,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 /**
@@ -72,18 +69,6 @@ public class DataSourceLoadBalancerConfig {
     @ConditionalOnMissingBean(name = "virtuaDataSourceDelegator")
     public IVirtuaDataSourceDelegator virtuaDataSourceDelegator(ILoadBalancerDataSourceService loadBalancerDataSourceService) {
         return new VirtuaDataSourceDelegator(loadBalancerDataSourceService);
-    }
-
-    /**
-     * 数据源代理
-     *
-     * @param virtuaDataSourceDelegator
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean(name = "dataSource", value = {DataSource.class})
-    public DataSource dataSource(IVirtuaDataSourceDelegator virtuaDataSourceDelegator, ShardingResourceProperties shardingResourceProperties) {
-        return new VirtualDataSource(virtuaDataSourceDelegator, shardingResourceProperties);
     }
 
     @Bean

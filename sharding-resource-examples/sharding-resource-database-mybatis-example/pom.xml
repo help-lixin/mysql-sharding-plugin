@@ -25,10 +25,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.4</version>
-        </dependency>
+		    <groupId>com.baomidou</groupId>
+    		<artifactId>mybatis-plus-boot-starter</artifactId>
+		    <version>3.4.2</version>
+		</dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -66,7 +66,6 @@
             <artifactId>guava</artifactId>
             <version>30.1.1-jre</version>
         </dependency>
-
         <dependency>
             <artifactId>sharding-resource-spring-boot-starter</artifactId>
             <groupId>help.lixin.sharding.resource</groupId>

@@ -23,6 +23,7 @@
         <mybatis.version>3.5.3</mybatis.version>
         <mybatis-spring-boot-starter.version>2.1.4</mybatis-spring-boot-starter.version>
         <mybatis-spring.version>2.0.3</mybatis-spring.version>
+        <mybatis-plus-boot-starter.version>3.4.2</mybatis-plus-boot-starter.version>
     </properties>
 
     <dependencyManagement>

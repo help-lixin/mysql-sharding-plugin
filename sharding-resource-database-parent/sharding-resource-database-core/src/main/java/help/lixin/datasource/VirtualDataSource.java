@@ -6,6 +6,9 @@ import help.lixin.datasource.properties.ShardingResourceProperties;
 import help.lixin.resource.context.ResourceContextHolder;
 import help.lixin.resource.context.ResourceContext;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -15,20 +18,28 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-public class VirtualDataSource implements DataSource {
+public class VirtualDataSource implements DataSource, ApplicationContextAware {
     private org.slf4j.Logger logger = LoggerFactory.getLogger(VirtualDataSource.class);
 
     private PrintWriter out;
     private int seconds;
 
+    private ApplicationContext applicationContext;
+
     private IVirtuaDataSourceDelegator virtuaDataSourceDelegator;
     private ShardingResourceProperties shardingResourceProperties;
 
-    public VirtualDataSource(IVirtuaDataSourceDelegator virtuaDataSourceDelegator, ShardingResourceProperties shardingResourceProperties) {
-        this.virtuaDataSourceDelegator = virtuaDataSourceDelegator;
-        this.shardingResourceProperties = shardingResourceProperties;
+    public VirtualDataSource() {
+        System.out.println("");
     }
 
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+        this.virtuaDataSourceDelegator = applicationContext.getBean(IVirtuaDataSourceDelegator.class);
+        this.shardingResourceProperties = applicationContext.getBean(ShardingResourceProperties.class);
+    }
 
     @Override
     public PrintWriter getLogWriter() throws SQLException {

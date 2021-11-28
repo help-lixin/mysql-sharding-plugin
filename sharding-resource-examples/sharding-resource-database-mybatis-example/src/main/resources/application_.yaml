@@ -6,7 +6,7 @@ mybatis:
 server:
   port: 8080
 
-spring:
+spring: 
   main:
     allow-bean-definition-overriding: true
   application:

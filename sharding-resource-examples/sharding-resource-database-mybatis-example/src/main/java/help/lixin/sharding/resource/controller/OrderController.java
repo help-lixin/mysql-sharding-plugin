@@ -1,5 +1,6 @@
 package help.lixin.sharding.resource.controller;
 
+import help.lixin.sharding.resource.entity.Order;
 import help.lixin.sharding.resource.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,23 @@ public class OrderController {
     @PostMapping("/save/{orderId}/{userId}/{price}/{status}")
     public String save(@PathVariable("orderId") Long orderId, @PathVariable("userId") Long userId, @PathVariable("price") BigDecimal price, @PathVariable("status") String status) {
         boolean save = orderService.save(orderId, userId, price, status);
+        return "SUCCESS";
+    }
+
+    @PostMapping("/save2")
+    public String save() {
+        Long orderId = 500L;
+        Long userId = 1000L;
+        BigDecimal price = new BigDecimal("100");
+        String status = "SUCCESS";
+
+        Order order = new Order();
+        order.setOrderId(orderId);
+        order.setUserId(userId);
+        order.setPrice(price);
+        order.setStatus(status);
+
+        boolean save = orderService.save(order);
         return "SUCCESS";
     }
 

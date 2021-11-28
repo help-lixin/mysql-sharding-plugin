@@ -1,5 +1,6 @@
 package help.lixin.sharding.resource.service.impl;
 
+import help.lixin.sharding.resource.entity.Order;
 import help.lixin.sharding.resource.mapper.OrderMapper;
 import help.lixin.sharding.resource.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,13 @@ public class OrderService implements IOrderService {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean save(Order order) {
+        int insert = orderMapper.insert(order);
+        return insert > 0 ? true : false;
+    }
 
     /**
      * @Transactional 标记为只读, 所以, 会在多个slave数据源中获取一个数据源.如果, 没有配置slave, 则选择master.

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
+@MapperScan("help.lixin.sharding.resource.mapper")
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
