@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+help.lixin.datasource.ShardingDataSourceAutoConfiguration
+org.springframework.boot.env.EnvironmentPostProcessor=\
+help.lixin.datasource.env.DefaultEnvironmentPostProcessor
