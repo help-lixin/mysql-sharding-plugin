@@ -7,26 +7,25 @@
    1.4) 缺点:代理模式机器的配置要求比较高(CPU/内存),而且,需要多台机器配置VIP飘移.    
    1.5) 缺点:分片算法变化数据需要重新入库(rehash).    
 
-3) 边车模式(Sharding JDBC/TDDL)优缺点:         
+2) 边车模式(Sharding JDBC/TDDL)优缺点:         
    2.1) 优点:解决了代理模式的问题.     
    2.2) 缺点:与具体的编程语言相关.  
    2.3) 缺点:分片算法变化数据需要重新入库(rehash).     
 
 ### 2. 为什么需要自研
 完全是因为业务需求驱动自研,需求列表如下:
-1) 租户刚开始使用SAAS系统,后来,从SAAS迁移到自家机房独立部署(涉及数取的迁移问题),后来,由于某些原因,又要迁回SAAS系统.        
-2) 数据是敏感信息,租户要求数据是完全隔离的.   
+1) 数据是敏感信息,租户要求数据是完全隔离的.        
+2) 租户刚开始使用SAAS系统,后来,从SAAS迁移到自家机房独立部署(涉及数取的迁移问题),后来,由于某些原因,又要迁回SAAS系统.
 MyCat和Sharding JDBC在遇到上述需求时,不太适合业务,所以,才会造成自研的一个主要原因.    
 
 ### 3. 实现思路
 1) DBA定义N个数据库实例(3306),每个实例上N(100)个库.     
-2) App(应用程序)启动时,根据条件(spring.sharding.resource.env=jd,taobao)初始化数据源(本地配置/远程拉取配置),远程拉取需要你自己实现接口:IDataSourceMetaService.            
-3) 租户注册时,记录租户对应的信息(数据库实例/Schema/Table前缀).   
-4) 租户登录时,都会带上这些信息,建议无状态化(比如JWT),可做到跨地域(而非中央式去交换信息),只需要做到加密这些数据即可.         
-5) 租户请求API时,拦截注解@Transaction,向上下文(DBResourceContext)填充这些信算了:数据库实例/Schema/Table前缀等信息.      
-6) 对DataSource和Connection进行了代理,拦截SQL语句进行改写,添加:schema/table前缀,能更好的支持:MyBatis/JdbcTemplate...   
+2) App(应用程序)启动时,根据条件(spring.sharding.resource.env=jd,taobao)初始化数据源(本地配置或远程拉取配置),远程拉取配置需要你自己实现接口:IDataSourceMetaService.            
+3) 租户注册时,为租户分配相应的信息(数据库实例/Schema/Table前缀).   
+4) 租户登录时,都会带上这些信息,建议无状态化(比如JWT),可以做到跨地域(而非中央式去交换信息),只需要做到加密这些数据即可.         
+5) 租户请求API时,向上下文(DBResourceContext)填充这些信息:数据库实例/Schema/Table前缀等信息.      
+6) 对DataSource和Connection进行了代理,拦截SQL语句进行改写,添加:schema/table前缀,能更好的支持:Hibernate/MyBatis/JdbcTemplate...   
 7) 为MyBatis添加Interceptor,拦截SQL语句进行改写,添加:schema/table前缀,原因:开发(生产环境)可能会打开MyBatis的日志控制台,给开发一个更加友好的体验.       
-8) 注意: Connection和Interceptor是排斥的,一条链路请求下来,SQL重写只会走一次,无须你单独配置,内部框架已经做好适配了.          
 
 ### 4. 项目工程结构介绍
 
@@ -71,6 +70,7 @@ lixin-macbook:sharding-resource-parent lixin$ tree -L 2
     <artifactId>sharding-resource-spring-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>
+
 <!-- 创建的DataSource,并没有交给Spring,而是统一放在Guava缓存里 -->
 <dependency>
    <groupId>com.google.guava</groupId>
